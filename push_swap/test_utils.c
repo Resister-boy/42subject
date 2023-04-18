@@ -6,7 +6,7 @@ void print_stack(t_stack *stack)
 
   if (stack == NULL)
   {
-    printf("Nothing Node\n");
+    printf("Nothing  Node\n");
     return ;
   }
   current = stack->head;
