@@ -1,92 +1,77 @@
 #include "./../so_long.h"
 
-int ft_is_map_square(t_map *map)
+int ft_check_map(t_stat* stat)
 {
-	size_t	w_len;
-
-	w_len = ft_strlen(map->map_line);
-	while (map->next != NULL)
-	{
-		if (ft_strlen(map->map_line) != w_len)
-			return (0);
-		map = map->next;
-	}
-	return (1);
+	if (ft_is_map_square(stat) == 0)
+		return (-1);
+	if (ft_is_size_enough(stat) == 0)
+		return (-1);
+	if (ft_is_rounded_wall(stat) == 0)
+		return (-1);
+	if (ft_check_map_symbol(stat) == 0)
+		return (-1);
+	if (ft_is_map_playable(stat) == 0)
+		return (-1);
+  return (1); 
 }
 
-int	ft_is_size_enough(t_map *map)
-{
-	size_t	w_len;
-	size_t	h_len;
-
-	w_len = ft_strlen(map->map_line);
-	h_len = 0;
-	while (map != NULL)
-	{
-		h_len++;
-		map = map->next;
-	}
-	if ((w_len * h_len) < 12)
-		return (0);
-	return (1);
-}
-
-int	ft_is_rounded_wall(t_map *map)
-{
-	while (map != NULL)
-	{
-		if (map->prev == NULL || map->next == NULL)
-		{
-			if (ft_is_all_wall(map->map_line) == 0)
-				return (0);
-		}
-		else if (ft_is_both_end_wall(map->map_line) == 0)
-			return (0);
-		map = map->next;
-	}
-	return (1);
-}
-
-int	ft_is_other_symbol(t_map *map)
+int ft_is_map_square(t_stat *stat)
 {
 	size_t	i;
-	char	*line;
-
-	while (map != NULL)
+	char		**map;
+	
+	i = 0;
+	map = stat->map_arr;
+	while (i < (stat->map_y))
 	{
-		i = 0;
-		line = map->map_line;
-		while (line[i])
-		{
-			if (line[i] != '1' && line[i] != 'E' && line[i] != 'C' \
-			&& line[i] != 'P' && line[i] != '0' && line[i] != '\n')
-				return (0);
-			i++;
-		}		
-		map = map->next;
+		if (ft_strlen(map[i]) != stat->map_x)
+			return (0);
+		i++;
 	}
 	return (1);
 }
 
-int	ft_is_symbol_ok(t_stat *stat)
+int	ft_is_size_enough(t_stat *stat)
+{
+	if (stat->map_x * stat->map_y > 12)
+		return (1);
+	return (0);	
+}
+
+int	ft_is_rounded_wall(t_stat *stat)
 {
 	size_t	i;
-	char	*line;
-	t_map	*map;
+	char	**map;
 
-	map = stat->map;
-	while (map != NULL)
+	i = 0;
+	map = stat->map_arr;
+	while (i < (stat->map_y))
 	{
-		i = 0;
-		line = map->map_line;
-		while (line[i])
+		if (i == 0 || i == stat->map_y - 1)
 		{
-			ft_count_flag(stat, line[i]);
-			i++;
+			if (ft_is_all_wall(map[i]) == 0)
+				return (0);
 		}
-		map = map->next;
+		else if (ft_is_both_end_wall(map[i]) == 0)
+			return (0);
+		i++;
 	}
-	if (stat->escape > 1 || stat->player > 1)
+	return (1);
+}
+
+int	ft_check_map_symbol(t_stat *stat)
+{
+	size_t	i;
+	char	**map;
+
+	i = 0;
+	while (i < (stat->map_y))
+	{
+		if (ft_check_symbol_utils(stat, map[i], i) == 0)
+			return (0);
+		i++;
+	}
+	if ((stat->escape) != 1 || (stat->player) != 1)
 		return (0);
 	return (1);
 }

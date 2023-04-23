@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaehulee <jaehulee@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jaehulee <jaehulee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/07 17:34:15 by jaehulee          #+#    #+#             */
-/*   Updated: 2023/03/23 15:26:41 by jaehulee         ###   ########.fr       */
+/*   Updated: 2023/04/20 01:46:54 by jaehulee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ char	*ft_read_line(int fd, char **backup)
 char	*get_next_line(int fd)
 {
 	static char	*backup;
-	char				*result;
+	char		*result;
 
 	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, NULL, 0) < 0)
 	{

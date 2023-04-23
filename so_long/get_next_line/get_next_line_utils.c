@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaehulee <jaehulee@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jaehulee <jaehulee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/07 17:36:31 by jaehulee          #+#    #+#             */
-/*   Updated: 2023/03/23 15:26:26 by jaehulee         ###   ########.fr       */
+/*   Updated: 2023/04/20 01:47:05 by jaehulee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

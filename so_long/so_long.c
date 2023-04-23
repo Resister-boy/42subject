@@ -1,86 +1,68 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   so_long.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jaehulee <jaehulee@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/04/20 01:29:37 by jaehulee          #+#    #+#             */
+/*   Updated: 2023/04/20 05:14:15 by jaehulee         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "./so_long.h"
 
-t_map	*ft_new_line(char *map_line)
+int	ft_init_stat(t_stat *stat, char *filename)
 {
-	t_map	*new_map;
-
-	new_map = (t_map *)malloc(sizeof(t_map));
-	new_map->next = NULL;
-	new_map->prev = NULL;
-	new_map->map_line = ft_strdup(map_line);
-	if (new_map->map_line == NULL)
-		return (NULL);
-	return (new_map);
-}
-
-void	ft_dup_map_line(char *map, t_stat *stat)
-{
-	t_map	*map_line;
-
-	map_line = ft_new_line(map);
-	if (map_line == NULL)
-	{
-		ft_free_map(stat);
-		exit(0);
-	}
-	ft_lstadd_back(stat, map_line);
-}
-
-void	ft_parse_map(t_stat *stat)
-{
-	char	*map;
-
-	map = get_next_line(stat->fd);
-	while (map != NULL)
-	{
-		ft_dup_map_line(map, stat);
-		free(map);
-		map = get_next_line(stat->fd);
-	}
-	free(map);
-}
-
-void	ft_init_stat(t_stat *stat)
-{
-	stat->fd = open("./map/map_false_symbol.ber", O_RDONLY);
+	stat->fd = open(filename, O_RDONLY);
 	if (stat->fd <= 0)
-		return ;
-	stat->map = NULL;
-	stat->escape_count = 0;
-	stat->collect_count = 0;
-	stat->start_count = 0;
+		return (0);
+	stat->map_list = NULL;
+	stat->map_arr = NULL;
+	stat->map_size = 0;
+	stat->map_x = 0;
+	stat->map_y = 0;
 	stat->win_width = 0;
 	stat->win_height = 0;
 	stat->move = 0;
-	stat->player_x = 0;
-	stat->player_y = 0;
 	stat->ground = 0;
 	stat->wall = 0;
 	stat->collection = 0;
 	stat->escape = 0;
 	stat->player = 0;
+	stat->t_collection = 0;
+	stat->t_escape = 0;
+	return (1);
 }
 
 void	so_long(t_stat *stat)
 {
-	int			is_collect_map;
+	int	is_collect_map;
 
 	ft_parse_map(stat);
+	ft_translate_arr(stat);
 	is_collect_map = ft_check_map(stat);
 	if (is_collect_map == -1)
 	{
 		ft_print_message("Error\n");
-		ft_free_map(stat);
+		ft_free_map_arr(stat, stat->map_arr);
 		exit(0);
 	}
-	ft_print_map(stat);
 	printf("\n\nsuccessfully work!\n");
 }
 
-int main(void)
+int	main(void)
 {
 	t_stat		stat;
+	char		*filename;
 
-	ft_init_stat(&stat);
+	filename = "./map/map_non_playable_3.ber";
+	if (ft_is_collect_file(filename) == 0)
+	{
+		ft_print_message("Error\n");
+		return (0);
+	}
+	if (ft_init_stat(&stat, filename) == 0)
+		return (0);
 	so_long(&stat);
 }

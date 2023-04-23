@@ -9,7 +9,6 @@ size_t  ft_strlen(char *str)
 	{
 		if (str[len] == '\n')
 			return (len);
-		len++;
 	}
 	return (len);
 }

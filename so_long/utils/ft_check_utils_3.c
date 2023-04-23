@@ -1,41 +1,58 @@
 #include "./../so_long.h"
 
-int ft_is_both_end_wall(char *str)
+int ft_is_map_playable(t_stat *stat)
 {
-	size_t	end;
+	int		player_x;
+	int		player_y;
+	char	**c_map;
 
-	end = ft_strlen(str) - 1;
-	if (str[0] != '1' || str[end] != '1')
+	player_x = stat->p_location.x;
+	player_y = stat->p_location.y;
+	c_map = ft_strsdup(stat);
+	printf("player_x: %d\n", player_x);
+	printf("player_y: %d\n", player_y);
+	if (ft_search_map(stat, c_map, player_y, player_x) == 0)
+	{
+		ft_free_map_arr(stat, c_map);
+		return (0);
+	}
+	ft_free_map_arr(stat, c_map);
+	return (1);
+}
+
+int	ft_search_map(t_stat *stat, char **map, int p_y, int p_x)
+{
+	if (map[p_y][p_x] == 'E' || map[p_y][p_x] == 'C' || map[p_y][p_x] == 'P' || map[p_y][p_x] == '0')
+		map[p_y][p_x] = '1';
+	if (map[p_y - 1][p_x] != '1')
+		ft_search_map(stat, map, p_y - 1, p_x);
+	if (map[p_y][p_x + 1] != '1')
+		ft_search_map(stat, map, p_y, p_x + 1);
+	if (map[p_y + 1][p_x] != '1')
+		ft_search_map(stat, map, p_y + 1, p_x);
+	if (map[p_y][p_x - 1] != '1')
+		ft_search_map(stat, map, p_y, p_x - 1);
+	if (ft_search_util(stat, map) == 0)
 		return (0);
 	return (1);
 }
 
-int ft_is_all_wall(char *str)
+int	ft_search_util(t_stat *stat, char **map)
 {
 	size_t	i;
-	size_t	len;
+	size_t	j;
 
 	i = 0;
-	len = ft_strlen(str);
-	while (i < len)
+	while (i < (stat->map_y))
 	{
-		if (str[i] != '1')
-			return (0);
+		j = 0;
+		while (j < (stat->map_x))
+		{
+			if (map[i][j] == 'E' || map[i][j] == 'C' || map[i][j] == 'P')
+				return (0);
+			j++;
+		}
 		i++;
 	}
 	return (1);
-}
-
-void	ft_count_flag(t_stat *stat, char symbol)
-{
-	if (symbol == '1')
-		(stat->wall)++;
-	else if (symbol == 'E')
-		(stat->escape)++;
-	else if (symbol == 'C')
-		(stat->collection)++;
-	else if (symbol == 'P')
-		(stat->player)++;
-	else if (symbol == '0')
-		(stat->ground)++;
 }

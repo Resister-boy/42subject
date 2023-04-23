@@ -1,13 +1,13 @@
 #include "./../so_long.h"
 
-void	ft_free_map(t_stat* stat)
+void	ft_free_map_list(t_stat	*stat)
 {
 	t_map	*map;
 	t_map	*temp;
 
-	if (stat->map == NULL)
+	if (stat->map_list == NULL)
 		return ;
-	map = stat->map;
+	map = stat->map_list;
 	while (map != NULL)
 	{
 		temp = map->next;
@@ -16,4 +16,18 @@ void	ft_free_map(t_stat* stat)
 		map = temp;
 	}
 	free(map);
+}
+
+void	ft_free_map_arr(t_stat *stat, char **strs)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < (stat->map_y))
+	{
+		strs[i] = NULL;
+		free(strs[i]);
+		i++;
+	}
+	free(strs);
 }
