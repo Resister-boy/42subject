@@ -1,13 +1,25 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_print_utils.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jaehulee <jaehulee@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/04/25 14:18:35 by jaehulee          #+#    #+#             */
+/*   Updated: 2023/04/25 14:19:01 by jaehulee         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "./../so_long.h"
 
-void  ft_print_message(char *str)
+void	ft_print_message(char *str)
 {
-  size_t  i;
+	size_t	i;
 
-  i = 0;
-  while (str[i])
-  {
-    write(1, &str[i], 1);
-    i++;
-  }
+	i = 0;
+	while (str[i])
+	{
+		write(1, &str[i], 1);
+		i++;
+	}
 }

@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_check_utils_3.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jaehulee <jaehulee@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/04/25 14:12:09 by jaehulee          #+#    #+#             */
+/*   Updated: 2023/04/25 14:16:00 by jaehulee         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "./../so_long.h"
 
-int ft_is_map_playable(t_stat *stat)
+int	ft_is_map_playable(t_stat *stat)
 {
 	int		player_x;
 	int		player_y;
@@ -9,8 +21,6 @@ int ft_is_map_playable(t_stat *stat)
 	player_x = stat->p_location.x;
 	player_y = stat->p_location.y;
 	c_map = ft_strsdup(stat);
-	printf("player_x: %d\n", player_x);
-	printf("player_y: %d\n", player_y);
 	if (ft_search_map(stat, c_map, player_y, player_x) == 0)
 	{
 		ft_free_map_arr(stat, c_map);
@@ -22,7 +32,8 @@ int ft_is_map_playable(t_stat *stat)
 
 int	ft_search_map(t_stat *stat, char **map, int p_y, int p_x)
 {
-	if (map[p_y][p_x] == 'E' || map[p_y][p_x] == 'C' || map[p_y][p_x] == 'P' || map[p_y][p_x] == '0')
+	if (map[p_y][p_x] == 'E' || map[p_y][p_x] == 'C' || \
+	map[p_y][p_x] == 'P' || map[p_y][p_x] == '0')
 		map[p_y][p_x] = '1';
 	if (map[p_y - 1][p_x] != '1')
 		ft_search_map(stat, map, p_y - 1, p_x);

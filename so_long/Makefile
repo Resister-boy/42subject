@@ -6,13 +6,13 @@
 #    By: jaehulee <jaehulee@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/10 13:50:49 by jaehulee          #+#    #+#              #
-#    Updated: 2023/04/20 05:09:17 by jaehulee         ###   ########.fr        #
+#    Updated: 2023/04/25 19:16:21 by jaehulee         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = so_long
-CC = gcc
-# CFLAGS = -Wall -Werror -Wextra
+CC = cc
+CFLAGS = -Wall -Werror -Wextra
 
 SOURCES = so_long.c \
 		./utils/ft_parse_utils.c \
@@ -30,6 +30,7 @@ SOURCES = so_long.c \
 		./lib/ft_strsdup.c \
 		./get_next_line/get_next_line.c \
 		./get_next_line/get_next_line_utils.c \
+		./games/ft_play_utils.c \
 		./test/ft_print_map.c
 
 all: $(NAME)
@@ -40,9 +41,7 @@ OBJECTS = $(SOURCES:.c=.o)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(NAME) : $(OBJECTS)
-	$(CC) $(CFLAGS) $(OBJECTS)  -o $(NAME)
-
-# -fsanitize=address -g3 -Lmlx -lmlx -framework OpenGL -framework AppKit
+	$(CC) $(CFLAGS) $(OBJECTS) -Lmlx -lmlx -framework OpenGL -framework AppKit -o $(NAME)
 
 clean :
 	rm -rf $(OBJECTS)

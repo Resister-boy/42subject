@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_check_utils_1.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jaehulee <jaehulee@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/04/25 14:09:04 by jaehulee          #+#    #+#             */
+/*   Updated: 2023/04/25 14:11:13 by jaehulee         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "./../so_long.h"
 
-int ft_check_map(t_stat* stat)
+int	ft_check_map(t_stat *stat)
 {
 	if (ft_is_map_square(stat) == 0)
 		return (-1);
@@ -12,14 +24,14 @@ int ft_check_map(t_stat* stat)
 		return (-1);
 	if (ft_is_map_playable(stat) == 0)
 		return (-1);
-  return (1); 
+	return (1);
 }
 
-int ft_is_map_square(t_stat *stat)
+int	ft_is_map_square(t_stat *stat)
 {
 	size_t	i;
-	char		**map;
-	
+	char	**map;
+
 	i = 0;
 	map = stat->map_arr;
 	while (i < (stat->map_y))
@@ -35,7 +47,7 @@ int	ft_is_size_enough(t_stat *stat)
 {
 	if (stat->map_x * stat->map_y > 12)
 		return (1);
-	return (0);	
+	return (0);
 }
 
 int	ft_is_rounded_wall(t_stat *stat)
@@ -65,6 +77,7 @@ int	ft_check_map_symbol(t_stat *stat)
 	char	**map;
 
 	i = 0;
+	map = stat->map_arr;
 	while (i < (stat->map_y))
 	{
 		if (ft_check_symbol_utils(stat, map[i], i) == 0)

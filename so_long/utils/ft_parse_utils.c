@@ -1,10 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_parse_utils.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jaehulee <jaehulee@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/04/25 14:05:15 by jaehulee          #+#    #+#             */
+/*   Updated: 2023/04/25 14:07:27 by jaehulee         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "./../so_long.h"
 
 void	ft_translate_arr(t_stat *stat)
 {
 	size_t	i;
 	t_map	*map;
-	
+
 	i = 0;
 	map = stat->map_list;
 	stat->map_y = ft_lstsize(map);
@@ -59,11 +71,11 @@ void	ft_parse_map(t_stat *stat)
 	free(map);
 }
 
-int ft_is_collect_file(char *filename)
+int	ft_is_collect_file(char *filename)
 {
-	int   	dot;
-	size_t	len;
-	size_t	t_len;
+	int		dot;
+	int		len;
+	int		t_len;
 
 	dot = -1;
 	len = ft_strlen(filename);
@@ -72,13 +84,14 @@ int ft_is_collect_file(char *filename)
 	{
 		if (filename[len] == '.')
 		{
-				dot = len;
-		break ;
+			dot = len;
+			break ;
 		}
 	}
 	if (dot == -1 || dot == t_len)
-    return (0);
-	else if (filename[dot + 1] == 'b' && filename[dot + 2] == 'e' && filename[dot + 3] == 'r' && dot + 4 == t_len)
+		return (0);
+	else if (filename[dot + 1] == 'b' && filename[dot + 2] == 'e' && \
+	filename[dot + 3] == 'r' && dot + 4 == t_len)
 		return (1);
 	return (0);
 }

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_check_utils_2.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jaehulee <jaehulee@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/04/25 14:10:35 by jaehulee          #+#    #+#             */
+/*   Updated: 2023/04/25 14:19:22 by jaehulee         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "./../so_long.h"
 
 int	ft_check_symbol_utils(t_stat *stat, char *line, size_t row)
@@ -35,7 +47,7 @@ int	ft_count_symbol(t_stat *stat, char symbol, size_t col, size_t row)
 	return (1);
 }
 
-int ft_is_both_end_wall(char *str)
+int	ft_is_both_end_wall(char *str)
 {
 	size_t	end;
 
@@ -45,7 +57,7 @@ int ft_is_both_end_wall(char *str)
 	return (1);
 }
 
-int ft_is_all_wall(char *str)
+int	ft_is_all_wall(char *str)
 {
 	size_t	i;
 	size_t	len;

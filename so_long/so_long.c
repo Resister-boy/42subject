@@ -6,11 +6,31 @@
 /*   By: jaehulee <jaehulee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/20 01:29:37 by jaehulee          #+#    #+#             */
-/*   Updated: 2023/04/20 05:14:15 by jaehulee         ###   ########.fr       */
+/*   Updated: 2023/04/25 19:48:58 by jaehulee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./so_long.h"
+
+void	ft_init_game(t_stat *stat, void *mlx_ptr, void *win_ptr)
+{
+	int	img_w;
+	int	img_y;
+
+	stat->mlx_ptr = mlx_ptr;
+	stat->win_ptr = win_ptr;
+	stat->p_img = mlx_xpm_file_to_image(mlx_ptr, "./src/doge.xpm", \
+	&img_w, &img_y);
+	stat->g_img = mlx_xpm_file_to_image(mlx_ptr, "./src/ground.xpm", \
+	&img_w, &img_y);
+	stat->c_img = mlx_xpm_file_to_image(mlx_ptr, "./src/rocket.xpm", \
+	&img_w, &img_y);
+	stat->e_img = mlx_xpm_file_to_image(mlx_ptr, "./src/mars.xpm", \
+	&img_w, &img_y);
+	stat->w_img = mlx_xpm_file_to_image(mlx_ptr, "./src/wall.xpm", \
+	&img_w, &img_y);
+	ft_draw_total_map(stat);
+}
 
 int	ft_init_stat(t_stat *stat, char *filename)
 {
@@ -19,11 +39,8 @@ int	ft_init_stat(t_stat *stat, char *filename)
 		return (0);
 	stat->map_list = NULL;
 	stat->map_arr = NULL;
-	stat->map_size = 0;
 	stat->map_x = 0;
 	stat->map_y = 0;
-	stat->win_width = 0;
-	stat->win_height = 0;
 	stat->move = 0;
 	stat->ground = 0;
 	stat->wall = 0;
@@ -37,7 +54,9 @@ int	ft_init_stat(t_stat *stat, char *filename)
 
 void	so_long(t_stat *stat)
 {
-	int	is_collect_map;
+	int		is_collect_map;
+	void	*mlx_ptr;
+	void	*win_ptr;
 
 	ft_parse_map(stat);
 	ft_translate_arr(stat);
@@ -48,7 +67,11 @@ void	so_long(t_stat *stat)
 		ft_free_map_arr(stat, stat->map_arr);
 		exit(0);
 	}
-	printf("\n\nsuccessfully work!\n");
+	mlx_ptr = mlx_init();
+	win_ptr = mlx_new_window(mlx_ptr, (stat->map_x) * 32, (stat->map_y) * 32, \
+	"so_long");
+	ft_init_game(stat, mlx_ptr, win_ptr);
+	mlx_loop(mlx_ptr);
 }
 
 int	main(void)
@@ -56,7 +79,7 @@ int	main(void)
 	t_stat		stat;
 	char		*filename;
 
-	filename = "./map/map_non_playable_3.ber";
+	filename = "./map/map_normal.ber";
 	if (ft_is_collect_file(filename) == 0)
 	{
 		ft_print_message("Error\n");
@@ -65,4 +88,5 @@ int	main(void)
 	if (ft_init_stat(&stat, filename) == 0)
 		return (0);
 	so_long(&stat);
+	printf("\n\nsuccessfully work!\n");
 }
