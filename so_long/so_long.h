@@ -6,7 +6,7 @@
 /*   By: jaehulee <jaehulee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/20 01:30:41 by jaehulee          #+#    #+#             */
-/*   Updated: 2023/04/25 19:16:01 by jaehulee         ###   ########.fr       */
+/*   Updated: 2023/04/28 09:12:22 by jaehulee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,15 @@
 # include <stdio.h>
 # include "./get_next_line/get_next_line.h"
 # include "./mlx/mlx.h"
+
+# define X_EVENT_KEY_PRESS			2
+# define X_EVENT_KEY_RELEASE		3
+
+# define KEY_ESC	53
+# define KEY_W		13
+# define KEY_D		2
+# define KEY_S		1
+# define KEY_A		0
 
 typedef struct s_map
 {
@@ -82,7 +91,7 @@ int		ft_check_map_symbol(t_stat *stat);
 
 // ft_check_utils_2.c
 int		ft_check_symbol_utils(t_stat *stat, char *line, size_t row);
-int		ft_count_symbol(t_stat *stat, char symbol, size_t col, size_t row);
+int		ft_count_symbol(t_stat *stat, char symbol, int col, int row);
 int		ft_is_both_end_wall(char *str);
 int		ft_is_all_wall(char *str);
 
@@ -91,12 +100,22 @@ int		ft_is_map_playable(t_stat *stat);
 int		ft_search_map(t_stat *stat, char **map, int p_y, int p_x);
 int		ft_search_util(t_stat *stat, char **map);
 
-// ft_print_utils.c
+// ft_print_utils_1.c
 void	ft_print_message(char *str);
 
 // ft_play_utils.c
-void	ft_render_img(t_stat *stat, size_t row, size_t col);
+void	ft_render_all_img(t_stat *stat, int row, int col);
 void	ft_draw_total_map(t_stat *stat);
+int		ft_key_press(int keycode, t_stat *stat);
+void	ft_render_single_img(t_stat *stat, void *img, int flag);
+int		ft_is_wall(t_stat *stat, int p_y, int p_x);
+
+// ft_play_utils_2.c
+void	ft_finish_game(t_stat *stat);
+void	ft_move_player(t_stat *stat, int p_y, int p_x);
+int		ft_check_escapable(t_stat *stat);
+void	ft_is_not_escape(t_stat *stat, int p_y, int p_x);
+void	ft_not_allow_escape(t_stat *stat, int p_y, int p_x);
 
 // lib
 void	ft_lstadd_back(t_stat *stat, t_map *new);

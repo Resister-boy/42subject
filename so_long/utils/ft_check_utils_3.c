@@ -6,7 +6,7 @@
 /*   By: jaehulee <jaehulee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 14:12:09 by jaehulee          #+#    #+#             */
-/*   Updated: 2023/04/25 14:16:00 by jaehulee         ###   ########.fr       */
+/*   Updated: 2023/04/28 05:32:24 by jaehulee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ int	ft_is_map_playable(t_stat *stat)
 
 	player_x = stat->p_location.x;
 	player_y = stat->p_location.y;
+	printf("player_y: %d\n", player_y);
+	printf("player_x: %d\n", player_x);
 	c_map = ft_strsdup(stat);
 	if (ft_search_map(stat, c_map, player_y, player_x) == 0)
 	{

@@ -6,7 +6,7 @@
 /*   By: jaehulee <jaehulee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/20 01:29:37 by jaehulee          #+#    #+#             */
-/*   Updated: 2023/04/25 19:48:58 by jaehulee         ###   ########.fr       */
+/*   Updated: 2023/04/28 07:15:02 by jaehulee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,8 @@ int	ft_init_stat(t_stat *stat, char *filename)
 	stat->player = 0;
 	stat->t_collection = 0;
 	stat->t_escape = 0;
+	stat->p_location.x = 0;
+	stat->p_location.y = 0;
 	return (1);
 }
 
@@ -71,6 +73,7 @@ void	so_long(t_stat *stat)
 	win_ptr = mlx_new_window(mlx_ptr, (stat->map_x) * 32, (stat->map_y) * 32, \
 	"so_long");
 	ft_init_game(stat, mlx_ptr, win_ptr);
+	mlx_hook(win_ptr, X_EVENT_KEY_PRESS, 0, &ft_key_press, stat);
 	mlx_loop(mlx_ptr);
 }
 
@@ -88,5 +91,6 @@ int	main(void)
 	if (ft_init_stat(&stat, filename) == 0)
 		return (0);
 	so_long(&stat);
+	close(stat.fd);
 	printf("\n\nsuccessfully work!\n");
 }

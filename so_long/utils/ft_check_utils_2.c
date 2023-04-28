@@ -6,7 +6,7 @@
 /*   By: jaehulee <jaehulee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 14:10:35 by jaehulee          #+#    #+#             */
-/*   Updated: 2023/04/25 14:19:22 by jaehulee         ###   ########.fr       */
+/*   Updated: 2023/04/28 07:36:28 by jaehulee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	ft_check_symbol_utils(t_stat *stat, char *line, size_t row)
 	return (1);
 }
 
-int	ft_count_symbol(t_stat *stat, char symbol, size_t col, size_t row)
+int	ft_count_symbol(t_stat *stat, char symbol, int col, int row)
 {
 	if (symbol == '1')
 		(stat->wall)++;
