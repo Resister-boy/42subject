@@ -6,7 +6,7 @@
 /*   By: jaehulee <jaehulee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 17:20:39 by jaehulee          #+#    #+#             */
-/*   Updated: 2023/04/28 10:07:35 by jaehulee         ###   ########.fr       */
+/*   Updated: 2023/05/03 17:57:57 by jaehulee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,10 +99,12 @@ void	ft_move_player(t_stat *stat, int p_y, int p_x)
 	{
 		ft_render_single_img(stat, stat->p_img, 0);
 		(stat->move)++;
-		exit(0);
+		ft_print_move(stat);
+		ft_finish_program(stat);
 	}
 	else if (map[p_y][p_x] == 'E' && ft_check_escapable(stat) == 0)
 		ft_not_allow_escape(stat, p_y, p_x);
 	else
 		ft_is_not_escape(stat, p_y, p_x);
+	ft_print_move(stat);
 }

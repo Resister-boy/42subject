@@ -6,7 +6,7 @@
 /*   By: jaehulee <jaehulee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 04:07:03 by jaehulee          #+#    #+#             */
-/*   Updated: 2023/04/28 10:07:10 by jaehulee         ###   ########.fr       */
+/*   Updated: 2023/05/03 16:13:05 by jaehulee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	ft_finish_game(t_stat *stat)
 {
-	ft_free_map_arr(stat, stat->map_arr);
+	ft_free_map_arr(stat, &(stat->map_arr));
 	mlx_destroy_window(stat->mlx_ptr, stat->win_ptr);
 	exit(0);
 }

@@ -6,7 +6,7 @@
 /*   By: jaehulee <jaehulee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 14:07:53 by jaehulee          #+#    #+#             */
-/*   Updated: 2023/04/28 05:32:29 by jaehulee         ###   ########.fr       */
+/*   Updated: 2023/05/03 17:30:49 by jaehulee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,19 +27,18 @@ void	ft_free_map_list(t_stat	*stat)
 		free(map);
 		map = temp;
 	}
-	free(map);
+	stat->map_list = NULL;
 }
 
-void	ft_free_map_arr(t_stat *stat, char **strs)
+void	ft_free_map_arr(t_stat *stat, char ***strs)
 {
 	size_t	i;
 
 	i = 0;
 	while (i < (stat->map_y))
 	{
-		strs[i] = NULL;
-		free(strs[i]);
+		free((*strs)[i]);
 		i++;
 	}
-	free(strs);
+	free(*strs);
 }

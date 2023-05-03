@@ -6,7 +6,7 @@
 /*   By: jaehulee <jaehulee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 14:09:04 by jaehulee          #+#    #+#             */
-/*   Updated: 2023/04/28 05:32:51 by jaehulee         ###   ########.fr       */
+/*   Updated: 2023/05/03 15:34:54 by jaehulee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ int	ft_check_map(t_stat *stat)
 	if (ft_check_map_symbol(stat) == 0)
 		return (-1);
 	if (ft_is_map_playable(stat) == 0)
+		return (-1);
+	if (stat->collection == 0 || stat->escape != 1 || stat->player != 1)
 		return (-1);
 	return (1);
 }

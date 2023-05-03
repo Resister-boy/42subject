@@ -6,7 +6,7 @@
 /*   By: jaehulee <jaehulee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 14:05:15 by jaehulee          #+#    #+#             */
-/*   Updated: 2023/04/28 05:31:19 by jaehulee         ###   ########.fr       */
+/*   Updated: 2023/05/03 17:41:08 by jaehulee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	ft_translate_arr(t_stat *stat)
 	stat->map_y = ft_lstsize(map);
 	stat->map_x = ft_strlen(map->map_line);
 	stat->map_arr = (char **)malloc(sizeof(char *) * (stat->map_y + 1));
-	stat->map_arr[stat->map_y - 1] = NULL;
+	stat->map_arr[stat->map_y] = NULL;
 	while (map != NULL)
 	{
 		stat->map_arr[i] = ft_strdup(map->map_line);
@@ -39,8 +39,6 @@ t_map	*ft_new_line(char *map_line)
 	new_map = (t_map *)malloc(sizeof(t_map));
 	new_map->next = NULL;
 	new_map->map_line = ft_strdup(map_line);
-	if (new_map->map_line == NULL)
-		return (NULL);
 	return (new_map);
 }
 
@@ -52,16 +50,22 @@ void	ft_dup_map_line(char *map, t_stat *stat)
 	if (map_line == NULL)
 	{
 		ft_free_map_list(stat);
+		free(map);
 		exit(0);
 	}
 	ft_lstadd_back(stat, map_line);
 }
 
-void	ft_parse_map(t_stat *stat)
+int	ft_parse_map(t_stat *stat)
 {
 	char	*map;
 
 	map = get_next_line(stat->fd);
+	if (map == NULL)
+	{
+		ft_print_message("Error\n");
+		return (0);
+	}
 	while (map != NULL)
 	{
 		ft_dup_map_line(map, stat);
@@ -69,6 +73,7 @@ void	ft_parse_map(t_stat *stat)
 		map = get_next_line(stat->fd);
 	}
 	free(map);
+	return (1);
 }
 
 int	ft_is_collect_file(char *filename)

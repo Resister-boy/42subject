@@ -6,13 +6,13 @@
 #    By: jaehulee <jaehulee@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/10 13:50:49 by jaehulee          #+#    #+#              #
-#    Updated: 2023/04/28 04:06:05 by jaehulee         ###   ########.fr        #
+#    Updated: 2023/05/03 17:55:44 by jaehulee         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = so_long
 CC = cc
-CFLAGS = -Wall -Werror -Wextra
+CFLAGS = -Wall -Werror -Wextra -g3
 
 SOURCES = so_long.c \
 		./utils/ft_parse_utils.c \
@@ -32,7 +32,7 @@ SOURCES = so_long.c \
 		./get_next_line/get_next_line_utils.c \
 		./games/ft_play_utils_1.c \
 		./games/ft_play_utils_2.c \
-		./test/ft_print_map.c
+		./games/ft_play_utils_3.c \
 
 all: $(NAME)
 

@@ -6,7 +6,7 @@
 /*   By: jaehulee <jaehulee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/20 01:29:37 by jaehulee          #+#    #+#             */
-/*   Updated: 2023/04/28 07:15:02 by jaehulee         ###   ########.fr       */
+/*   Updated: 2023/05/03 18:07:25 by jaehulee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,6 @@ int	ft_init_stat(t_stat *stat, char *filename)
 	stat->collection = 0;
 	stat->escape = 0;
 	stat->player = 0;
-	stat->t_collection = 0;
-	stat->t_escape = 0;
 	stat->p_location.x = 0;
 	stat->p_location.y = 0;
 	return (1);
@@ -60,13 +58,17 @@ void	so_long(t_stat *stat)
 	void	*mlx_ptr;
 	void	*win_ptr;
 
-	ft_parse_map(stat);
+	if (ft_parse_map(stat) == 0)
+	{
+		ft_free_map_list(stat);
+		return ;
+	}
 	ft_translate_arr(stat);
 	is_collect_map = ft_check_map(stat);
 	if (is_collect_map == -1)
 	{
 		ft_print_message("Error\n");
-		ft_free_map_arr(stat, stat->map_arr);
+		ft_free_map_arr(stat, &(stat->map_arr));
 		exit(0);
 	}
 	mlx_ptr = mlx_init();
@@ -74,23 +76,23 @@ void	so_long(t_stat *stat)
 	"so_long");
 	ft_init_game(stat, mlx_ptr, win_ptr);
 	mlx_hook(win_ptr, X_EVENT_KEY_PRESS, 0, &ft_key_press, stat);
+	mlx_hook(win_ptr, X_EVENT_WINDOW_CLOSE, 0, &ft_finish_program, stat);
 	mlx_loop(mlx_ptr);
 }
 
-int	main(void)
+int	main(int argc, char **argv)
 {
 	t_stat		stat;
-	char		*filename;
 
-	filename = "./map/map_normal.ber";
-	if (ft_is_collect_file(filename) == 0)
+	if (argc != 2)
+		return (0);
+	if (ft_is_collect_file(argv[1]) == 0)
 	{
 		ft_print_message("Error\n");
 		return (0);
 	}
-	if (ft_init_stat(&stat, filename) == 0)
+	if (ft_init_stat(&stat, argv[1]) == 0)
 		return (0);
 	so_long(&stat);
 	close(stat.fd);
-	printf("\n\nsuccessfully work!\n");
 }

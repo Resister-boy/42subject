@@ -6,7 +6,7 @@
 /*   By: jaehulee <jaehulee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/20 01:30:41 by jaehulee          #+#    #+#             */
-/*   Updated: 2023/04/28 09:12:22 by jaehulee         ###   ########.fr       */
+/*   Updated: 2023/05/03 17:55:48 by jaehulee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 # include "./mlx/mlx.h"
 
 # define X_EVENT_KEY_PRESS			2
-# define X_EVENT_KEY_RELEASE		3
+# define X_EVENT_WINDOW_CLOSE		17
 
 # define KEY_ESC	53
 # define KEY_W		13
@@ -62,8 +62,6 @@ typedef struct s_stat
 	int			wall;
 	int			collection;
 	int			escape;
-	int			t_collection;
-	int			t_escape;
 }	t_stat;
 
 // so_long.c
@@ -72,7 +70,7 @@ void	ft_init_game(t_stat *stat, void *mlx_ptr, void *win_ptr);
 int		ft_init_stat(t_stat *stat, char *filename);
 
 // ft_parse_utils.c
-void	ft_parse_map(t_stat *stat);
+int		ft_parse_map(t_stat *stat);
 void	ft_dup_map_line(char *map, t_stat *stat);
 t_map	*ft_new_line(char *map_line);
 int		ft_is_collect_file(char *filename);
@@ -80,7 +78,7 @@ void	ft_translate_arr(t_stat *stat);
 
 // ft_free_utils.c 
 void	ft_free_map_list(t_stat *stat);
-void	ft_free_map_arr(t_stat *stat, char **strs);
+void	ft_free_map_arr(t_stat *stat, char ***strs);
 
 // ft_check_utils_1.c
 int		ft_check_map(t_stat *stat);
@@ -117,6 +115,11 @@ int		ft_check_escapable(t_stat *stat);
 void	ft_is_not_escape(t_stat *stat, int p_y, int p_x);
 void	ft_not_allow_escape(t_stat *stat, int p_y, int p_x);
 
+// ft_play_utils_3.c
+int		ft_finish_program(t_stat *stat);
+void	ft_print_move(t_stat *stat);
+void	ft_print_decimal(int n, char *base);
+
 // lib
 void	ft_lstadd_back(t_stat *stat, t_map *new);
 t_map	*ft_lstlast(t_map *map);
@@ -125,8 +128,5 @@ char	*ft_strdup(char *str);
 size_t	ft_strlen(char *str);
 size_t	ft_total_len(char **strs);
 char	**ft_strsdup(t_stat *stat);
-
-void	ft_print_map_list(t_stat *stat);
-void	ft_print_map_arr(t_stat *stat, char **strs);
 
 #endif

@@ -2,6 +2,10 @@
     "C_Cpp.errorSquiggles": "disabled",
     "files.associations": {
         "so_long.h": "c",
-        "get_next_line.h": "c"
+        "get_next_line.h": "c",
+        "bitset": "c",
+        "functional": "c",
+        "iterator": "c",
+        "memory": "c"
     }
 }
