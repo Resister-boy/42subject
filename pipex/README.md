@@ -1,0 +1,12 @@
+## Allowed Function
+- access()
+- pipe()
+- execve()
+- unlink()
+- perror()
+- stderror()
+- dup()
+- dup2()
+- wait()
+- waitpid()
+- fork()
