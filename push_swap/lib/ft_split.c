@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_split.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jaehulee <jaehulee@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/23 13:23:56 by jaehulee          #+#    #+#             */
+/*   Updated: 2023/04/12 14:01:51 by jaehulee         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "./../push_swap.h"
 
-static char	**free_double_str(char **result)
+char	**free_double_str(char **result)
 {
 	int	i;
 
@@ -13,7 +25,7 @@ static char	**free_double_str(char **result)
 	return (NULL);
 }
 
-static size_t	count_total_string(char const *s, char c)
+size_t	count_total_string(char *s, char c)
 {
 	size_t	i;
 	size_t	count;
@@ -34,7 +46,7 @@ static size_t	count_total_string(char const *s, char c)
 	return (count);
 }
 
-static	size_t	count_single_str(char const *s, char c)
+static	size_t	count_single_str(char *s, char c)
 {
 	size_t	str_len;
 
@@ -50,7 +62,7 @@ static	size_t	count_single_str(char const *s, char c)
 	return (str_len);
 }
 
-char	**ft_split(char const *s, char c)
+char	**ft_split(char *s, char c)
 {
 	size_t	i;
 	size_t	total_string;

@@ -1,22 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstlast.c                                       :+:      :+:    :+:   */
+/*   swap_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jaehulee <jaehulee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/23 13:22:33 by jaehulee          #+#    #+#             */
-/*   Updated: 2023/04/08 15:06:03 by jaehulee         ###   ########.fr       */
+/*   Created: 2023/03/26 21:34:23 by jaehulee          #+#    #+#             */
+/*   Updated: 2023/03/27 16:02:58 by jaehulee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./../push_swap.h"
 
-t_node	*ft_lstlast(t_node *node)
+void	ft_case_stack_over(t_node **head, t_node **head_next, t_node **temp)
 {
-	if (node == NULL)
-		return (NULL);
-	while (node->next)
-		node = node->next;
-	return (node);
+	(*temp) = (*head_next)->next;
+	(*head_next)->next = (*head);
+	(*head)->next = (*temp);
+	(*temp)->prev = (*head);
+}
+
+void	ft_case_stack_two(t_stack **stack, t_node **head, t_node **head_next)
+{
+	(*head_next)->next = (*head);
+	(*stack)->tail = (*head);
+	(*head)->next = NULL;
 }

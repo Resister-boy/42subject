@@ -1,4 +1,38 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   arg_utils.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jaehulee <jaehulee@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/23 13:04:15 by jaehulee          #+#    #+#             */
+/*   Updated: 2023/04/12 16:57:38 by jaehulee         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "./../push_swap.h"
+
+void	ft_allocate_arg(int argc, char **argv, char **args)
+{
+	int		i;
+	size_t	j;
+	char	**temp;
+
+	i = 1;
+	while (i < argc)
+	{
+		j = 0;
+		temp = ft_split(argv[i], ' ');
+		while (temp[j])
+		{
+			(*args) = ft_strdup(temp[j]);
+			(args)++;
+			j++;
+		}
+		i++;
+		ft_free_str(&temp);
+	}
+}
 
 int	ft_check_only_num(char *str)
 {
@@ -7,55 +41,53 @@ int	ft_check_only_num(char *str)
 	i = 0;
 	while (str[i] != '\0')
 	{
-		if (str[i] >= 48 && 57 >= str[i])
+		if ((str[i] >= '0' && '9' >= str[i]) || \
+		(str[i] == '-' || str[i] == ' '))
 			i++;
 		else
-			return (-1);
+			return (0);
 	}
 	return (1);
 }
 
-int  ft_check_double(int current, size_t current_idx, char **args)
+int	ft_check_double(int current, size_t current_idx, char **args)
 {
-  size_t	i;
-	size_t	j;
+	size_t	i;
 
-  i = 0;
-  while (args[i] != NULL)
-  {
-    if (i != current_idx && current == ft_atoi(args[i]))
-      return (-1);
-    i++;
-  }
-  return (1);
+	i = 0;
+	while (args[i] != NULL)
+	{
+		if (i != current_idx && current == ft_atoi(args[i]))
+			return (0);
+		i++;
+	}
+	return (1);
 }
 
-char  **ft_check_args(int argc, char **argv)
+int	ft_get_double_len(char **argv)
 {
-  size_t         i;
-  long long int  num;
-  char           **args;
+	size_t	len;
 
-  i = 0;
-  if (argc == 2)
-    args = ft_split(argv[1], ' ');
-  else
-  {
-    i = 1;
-    args = argv;
-  }
-  while (args[i])
-  {
-    num = ft_atoi(args[i]);
-    if (!ft_check_only_num(args[i]))
-      ft_error("Error\n");
-    if (!ft_check_double(num, i, args))
-      ft_error("Error\n");
-		if (num < -2147483648 || num > 2147483647)
-			ft_error("Error\n");
-		i++;
-  }
-  if (argc == 2)
-    ft_free(args);
-  return (args);
+	len = 0;
+	while (argv[len])
+		len++;
+	return (len);
+}
+
+char	**ft_check_args(int argc, char **argv)
+{
+	size_t		size;
+	char		**args;
+
+	if (argc == 2)
+		ft_argc_small(argv, &args);
+	else
+	{
+		size = ft_count_total_len(argc, argv) + 1;
+		args = (char **)malloc(sizeof(char *) * size);
+		args[size - 1] = NULL;
+		ft_allocate_arg(argc, argv, args);
+	}
+	ft_check_args_kit(args);
+	return (args);
 }

@@ -1,13 +1,26 @@
-#include "./../push_swap.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_atoi.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jaehulee <jaehulee@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/23 13:19:44 by jaehulee          #+#    #+#             */
+/*   Updated: 2023/04/12 15:24:15 by jaehulee         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-int	ft_atoi(const char *str)
+#include "./../push_swap.h"
+#include <stdio.h>
+
+long long	ft_atoi(char *str)
 {
-	long long int	sign;
-	long long int	value;
+	long long	sign;
+	long long	value;
 
 	sign = 1;
 	value = 0;
-	while (*str != '\0' && *str == 32 || (*str >= 9 && *str <= 13))
+	while (*str == 32 || (*str >= 9 && *str <= 13))
 		str++;
 	if (*str == '+' || *str == '-')
 	{

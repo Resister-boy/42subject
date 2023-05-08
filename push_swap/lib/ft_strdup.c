@@ -1,22 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstlast.c                                       :+:      :+:    :+:   */
+/*   ft_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaehulee <jaehulee@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jaehulee <jaehulee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/23 13:22:33 by jaehulee          #+#    #+#             */
-/*   Updated: 2023/04/08 15:06:03 by jaehulee         ###   ########.fr       */
+/*   Created: 2023/04/12 12:10:13 by jaehulee          #+#    #+#             */
+/*   Updated: 2023/04/12 12:11:28 by jaehulee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./../push_swap.h"
 
-t_node	*ft_lstlast(t_node *node)
+char	*ft_strdup(char *str)
 {
-	if (node == NULL)
+	int		i;
+	char	*new_str;
+
+	i = 0;
+	new_str = (char *)malloc(ft_strlen(str) * sizeof(char) + 1);
+	if (!new_str)
 		return (NULL);
-	while (node->next)
-		node = node->next;
-	return (node);
+	while (str[i])
+	{
+		new_str[i] = str[i];
+		i++;
+	}
+	new_str[i] = '\0';
+	return (new_str);
 }
