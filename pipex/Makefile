@@ -6,7 +6,7 @@
 #    By: jaehulee <jaehulee@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/09 02:09:37 by jaehulee          #+#    #+#              #
-#    Updated: 2023/05/09 11:53:41 by jaehulee         ###   ########.fr        #
+#    Updated: 2023/05/09 22:52:18 by jaehulee         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,6 +18,8 @@ RMFLAGS = -rf
 SOURCES = ./pipex.c \
 		./utils/ft_command_utils.c \
 		./utils/ft_print_utils.c \
+		./utils/ft_process_utils.c \
+		./utils/ft_free_utils.c \
 		./lib/ft_substr.c \
 		./lib/ft_strncmp.c \
 		./lib/ft_strlen.c \

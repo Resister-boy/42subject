@@ -6,41 +6,38 @@
 /*   By: jaehulee <jaehulee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 02:47:46 by jaehulee          #+#    #+#             */
-/*   Updated: 2023/05/09 13:31:22 by jaehulee         ###   ########.fr       */
+/*   Updated: 2023/05/09 17:03:44 by jaehulee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./../pipex.h"
 
-void	ft_find_cmd(char *envp, t_pipe *pipe)
+void	ft_find_cmd(char *envp, t_pipe *pip)
 {
 	size_t	i;
-	size_t	j;
 	t_cmd	*cmds;
 	char	*cmd_path;
 
-	i = 0;
-	cmds = (pipe->cmds);
-	(pipe->paths) = ft_split(ft_substr(envp, 5, ft_strlen(envp)), ':');
-	while (i < (pipe)->cmd_count)
+	cmds = (pip->cmds);
+	(pip->paths) = ft_split(ft_substr(envp, 5, ft_strlen(envp)), ':');
+	while (cmds != NULL)
 	{
-		j = 0;
-		while ((pipe->paths)[j])
+		i = 0;
+		while ((pip->paths)[i])
 		{
-			cmd_path = ft_strjoin((pipe->paths)[j], "/ls");
-			printf("cmd_path: %s\n", cmd_path);
+			cmd_path = ft_strjoin((pip->paths)[i], cmds->cmd);
 			if (ft_check_executable(cmd_path))
 				printf("True\n");
 			else
 				printf("False\n");
-			j++;
+			i++;
 		}
 		free(cmd_path);
 		cmds = cmds->next;
 	}
 }
 
-void	ft_find_path(char **envp, t_pipe *pipe)
+void	ft_find_path(char **envp, t_pipe *pip)
 {
 	size_t	i;
 	char	*path;
@@ -57,32 +54,31 @@ void	ft_find_path(char **envp, t_pipe *pipe)
 		free(path);
 		i++;
 	}
-	printf("%s\n", path);
-	printf("%s\n", envp[i]);
-	ft_find_cmd(envp[i], pipe);
+	ft_find_cmd(envp[i], pip);
 }
 
-void	ft_store_cmd(int argc, char **argv, t_pipe *pipe)
+void	ft_store_cmd(int argc, char **argv, t_pipe *pip)
 {
 	int		i;
 	char	*cmd;
+	char	*option;
 
 	i = 2;
+	option = NULL;
 	while (i < (argc - 1))
 	{
-		if (argv[i + 1][0] == '-')
-		{
-			cmd = ft_strjoin(argv[i], ft_strjoin(" ", argv[i + 1]));
-			i += 2;
-		}
-		else
+		if (argv[i][0] != '-')
 		{
 			cmd = argv[i];
-			i++;
+			if (argv[i + 1][0] == '-')
+			{
+				option = argv[i + 1];
+				(pip->cmd_count) += 1;
+			}
+			ft_lstadd_back(&(pip->cmds), ft_lstnew(cmd, option));
 		}
-		ft_lstadd_back(&(pipe->cmds), ft_lstnew(cmd));
+		i++;
 	}
-	pipe->cmd_count = i;
 }
 
 int	ft_check_executable(char *cmd_path)

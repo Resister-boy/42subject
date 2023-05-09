@@ -6,7 +6,7 @@
 /*   By: jaehulee <jaehulee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 03:05:14 by jaehulee          #+#    #+#             */
-/*   Updated: 2023/05/09 03:05:52 by jaehulee         ###   ########.fr       */
+/*   Updated: 2023/05/09 14:41:47 by jaehulee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ char	*ft_strdup(char *str)
 	char	*new_str;
 
 	i = 0;
+	if (str == NULL)
+		return (NULL);
 	new_str = (char *)malloc(ft_strlen(str) * sizeof(char) + 1);
 	if (!new_str)
 		return (NULL);

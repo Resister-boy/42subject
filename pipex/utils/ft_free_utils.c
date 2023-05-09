@@ -1,26 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_print_cmd.c                                     :+:      :+:    :+:   */
+/*   ft_free_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jaehulee <jaehulee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/09 11:52:12 by jaehulee          #+#    #+#             */
-/*   Updated: 2023/05/09 17:04:18 by jaehulee         ###   ########.fr       */
+/*   Created: 2023/05/09 22:41:10 by jaehulee          #+#    #+#             */
+/*   Updated: 2023/05/09 22:41:50 by jaehulee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./../pipex.h"
 
-void	ft_print_cmd(t_pipe *pip)
+void	ft_close_fd(t_pipe *pip)
 {
-	t_cmd	*cmd;
-
-	cmd = pip->cmds;
-	while (cmd != NULL)
-	{
-		printf("%s\n", cmd->cmd);
-		printf("%s\n", cmd->op);
-		cmd = cmd->next;
-	}
+	close(pip->in);
+	close(pip->out);
 }
