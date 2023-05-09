@@ -1,9 +1,34 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: jaehulee <jaehulee@student.42.fr>          +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2023/05/09 02:09:37 by jaehulee          #+#    #+#              #
+#    Updated: 2023/05/09 11:53:41 by jaehulee         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 NAME = pipex
-CC = gcc 
-CFLAGS = -o -c
+CC = cc 
+CFLAGS = -Wall -Wextra -Werror
 RM = rm
 RMFLAGS = -rf 
-SOURCES = pipex.c
+SOURCES = ./pipex.c \
+		./utils/ft_command_utils.c \
+		./utils/ft_print_utils.c \
+		./lib/ft_substr.c \
+		./lib/ft_strncmp.c \
+		./lib/ft_strlen.c \
+		./lib/ft_strdup.c \
+		./lib/ft_split.c \
+		./lib/ft_strjoin.c \
+		./lib/ft_lstnew.c \
+		./lib/ft_lstlast.c \
+		./lib/ft_lstadd_back.c \
+		./lib/ft_strlcpy.c \
+		./test/ft_print_cmd.c
 
 OBJECTS = $(SOURCES:.c=.o)
 
