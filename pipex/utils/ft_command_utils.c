@@ -71,10 +71,7 @@ void	ft_store_cmd(int argc, char **argv, t_pipe *pip)
 		{
 			cmd = argv[i];
 			if (argv[i + 1][0] == '-')
-			{
 				option = argv[i + 1];
-				(pip->cmd_count) += 1;
-			}
 			ft_lstadd_back(&(pip->cmds), ft_lstnew(cmd, option));
 		}
 		i++;

@@ -19,9 +19,13 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
+# include "./get_next_line/get_next_line.h"
 
 # define ERROR_CMD_NOT_EXIST	"Nonexistent command\n"
 # define ERROR_CMD_UNEXECUTABLE	"Unexecutable command\n"
+# define ERROR_HEREDOC			"HEREDOC ERROR\n"
+# define ERROR_INFILE				"INFILE ERROR\n"
+# define ERROR_OUTFILE			"OUTFILE ERROR\n"
 
 typedef struct s_cmd
 {
@@ -32,15 +36,15 @@ typedef struct s_cmd
 
 typedef struct s_pipe
 {
-	int		in;
-	int		out;
+	int		fd[2];
+	int		here_doc;
 	t_cmd	*cmds;
 	char	**paths;
 	size_t	cmd_count;
 }	t_pipe;
 
 int		pipex(char **argv, char **envp, t_pipe *pip);
-void	ft_init_pipe(t_pipe *pip);
+void	ft_init_pipe(t_pipe *pip, int argc, char **argv);
 
 // ft_command_utils.c
 void	ft_find_path(char **envp, t_pipe *pip);
@@ -55,6 +59,11 @@ void	ft_control_pproc(char **argv, t_pipe *pip, pid_t pid);
 
 // ft_free_utils.c
 void	ft_close_fd(t_pipe *pip);
+
+// ft_here_doc_utils.c
+void	ft_here_doc(char *argv, t_pipe *pip);
+int		ft_check_heredoc(char *argv);
+void	ft_is_created(char *filename, t_pipe *pip);
 
 // ft_print_utils.c
 void	ft_print_msg(char *msg);

@@ -20,6 +20,7 @@ SOURCES = ./pipex.c \
 		./utils/ft_print_utils.c \
 		./utils/ft_process_utils.c \
 		./utils/ft_free_utils.c \
+		./utils/ft_here_doc_utils.c \
 		./lib/ft_substr.c \
 		./lib/ft_strncmp.c \
 		./lib/ft_strlen.c \
