@@ -6,7 +6,7 @@
 /*   By: jaehulee <jaehulee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 17:08:41 by jaehulee          #+#    #+#             */
-/*   Updated: 2023/05/19 20:12:25 by jaehulee         ###   ########.fr       */
+/*   Updated: 2023/05/24 15:57:36 by jaehulee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,10 +43,10 @@ int	parse_out_redir(char *cmd, size_t idx, t_io **r_list)
 		(redir->type) = REDIR_SINGLE_OUT;
 		(idx) += 1;
 	}
-	while (cmd[(idx)] && cmd[(idx)] == ' ')
+	while (cmd[(idx)] && check_space(cmd[idx]))
 		(idx)++;
 	start = (idx);
-	while (cmd[(idx)] && cmd[(idx)] != ' ')
+	while (cmd[(idx)] && !check_space(cmd[idx]))
 		(idx)++;
 	redir->filename = ft_substr(cmd, start, (idx) - start);
 	redir->next = NULL;
@@ -70,30 +70,13 @@ int	parse_in_redir(char *cmd, size_t idx, t_io **r_list)
 		(redir->type) = REDIR_SINGLE_IN;
 		(idx) += 1;
 	}
-	while (cmd[(idx)] == ' ')
+	while (check_space(cmd[idx]))
 		(idx)++;
 	start = (idx);
-	while (cmd[(idx)] != ' ')
+	while (!check_space(cmd[idx]))
 		(idx)++;
 	redir->filename = ft_substr(cmd, start, (idx) - start);
 	redir->next = NULL;
 	connect_redir(r_list, redir);
 	return (idx);
-}
-
-t_io	*get_redirs(char *cmds)
-{
-	size_t	i;
-	t_io	*redir;
-
-	i = 0;
-	redir = NULL;
-	while (cmds && cmds[i])
-	{
-		if (cmds[i] == '<')
-			i = parse_in_redir(cmds, i, &redir);
-		else if (cmds[i] == '>')
-			i = parse_out_redir(cmds, i, &redir);
-	}
-	return (redir);
 }

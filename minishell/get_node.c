@@ -6,54 +6,81 @@
 /*   By: jaehulee <jaehulee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 17:18:52 by jaehulee          #+#    #+#             */
-/*   Updated: 2023/05/19 20:17:53 by jaehulee         ###   ########.fr       */
+/*   Updated: 2023/05/24 18:50:49 by jaehulee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./minishell.h"
 
-t_pipe	*get_lastnode(t_pipe_manager *p_manager)
+t_pipe	*get_lastnode(t_pipe_manager *p_man)
 {
 	t_pipe	*cur;
 
-	if (p_manager->head == NULL)
+	if (p_man->head == NULL)
 		return (NULL);
-	cur = p_manager->head;
+	cur = p_man->head;
 	while (cur->next)
 		cur = cur->next;
 	return (cur);
 }
 
-int	fill_content(char *cmds, t_pipe *pipe, char **envp)
+int	is_valid_pipe(char *prompt, size_t idx, int status)
 {
-	size_t	i;
-	t_io	*redir;
-	int		quote[2];
-
-	i = 0;
-	redir = NULL;
-	while (cmds[i])
-	{
-		if (cmds[i] == '<')
-			i = parse_in_redir(cmds, i, &redir);
-		else if (cmds[i] == '>')
-			i = parse_out_redir(cmds, i, &redir);
-	}
+	if (idx == 0 || (prompt[idx] == '|' && status == 0))
+		return (1);
+	return (0);
 }
 
-void	create_pipe_list(t_pipe_manager *p_manager, char *cmds, char **envp)
+void	create_pipe_node(t_pipe_manager *p_man)
 {
 	t_pipe	*new;
 	t_pipe	*last;
 
-	if (envp == NULL || cmds == NULL)
-		return ;
 	new = (t_pipe *)malloc(sizeof(t_pipe));
-	new->test = ft_strdup(cmds);
-	fill_content(cmds, &new);
-	last = get_lastnode(p_manager);
+	new->cmd = NULL;
+	new->next = NULL;
+	new->redir = NULL;
+	new->temp = NULL;
+	last = get_lastnode(p_man);
 	if (last == NULL)
-		p_manager->head = new;
+		p_man->head = new;
 	else
 		last->next = new;
+}
+
+void	get_content(t_pipe_manager *p_man, t_io *r_list)
+{
+	t_pipe	*last;
+
+	last = get_lastnode(p_man);
+	if (r_list != NULL)
+			last->redir = r_list;
+	if (last->temp != NULL)
+		last->cmd = change_cmds(last);
+}
+
+int	parse_prompt(t_pipe_manager *p_man, char *prompt, char **envp)
+{
+	size_t	i;
+	int		status;
+	t_io	*redir;
+
+	i = 0;
+	status = 0;
+	redir = NULL;
+	if (!envp)
+		return (0);
+	while (prompt[i])
+	{
+		if (is_valid_pipe(prompt, i, status))
+			create_pipe_node(p_man);
+		if (check_quote(prompt[i], &status) == 0)
+			i = parse_no_q(p_man, prompt, i, &redir);
+		else if (check_quote(prompt[i], &status) == 1)
+			i = parse_single_q(p_man, prompt, i);
+		else if (check_quote(prompt[i], &status) == 2)
+			i = parse_double_q(p_man, prompt, i);
+		get_content(p_man, redir);
+	}
+	return (1);
 }

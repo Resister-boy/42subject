@@ -6,7 +6,7 @@
 /*   By: jaehulee <jaehulee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 13:47:01 by jaehulee          #+#    #+#             */
-/*   Updated: 2023/05/19 17:15:50 by jaehulee         ###   ########.fr       */
+/*   Updated: 2023/05/24 18:34:31 by jaehulee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,21 +15,13 @@
 int	parsing(char *prompt, char **envp)
 {
 	size_t			i;
-	char			**cmds;
 	t_pipe_manager	*p_manager;
 
 	i = 0;
-	cmds = ft_split(prompt, '|');
 	p_manager = (t_pipe_manager *)malloc(sizeof(t_pipe_manager));
 	(p_manager->len) = 0;
 	(p_manager->head) = NULL;
-	printf("cmds_len: %zu\n", ft_strslen(cmds));
-	while (i < ft_strslen(cmds))
-	{
-		create_pipe_list(p_manager, cmds[i], envp);
-		(p_manager->len)++;
-		i++;
-	}
+	parse_prompt(p_manager, prompt, envp);
 	print_pipe(p_manager);
 	return (1);
 }

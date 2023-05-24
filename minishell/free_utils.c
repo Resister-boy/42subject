@@ -1,31 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   free_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jaehulee <jaehulee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/18 20:47:44 by jaehulee          #+#    #+#             */
-/*   Updated: 2023/05/19 20:07:50 by jaehulee         ###   ########.fr       */
+/*   Created: 2023/05/24 13:34:06 by jaehulee          #+#    #+#             */
+/*   Updated: 2023/05/24 13:37:35 by jaehulee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./minishell.h"
 
-int	check_s_q(char chr, int *s_quote)
+void	free_tmps(t_pipe *node)
 {
-	if (chr == '\'' && *s_quote == 1)
-		*s_quote = 0;
-	else if (chr == '\'' && *s_quote == 0)
-		*s_quote = 1;
-	return (*s_quote);
-}
+	t_tmp	*cur;
+	t_tmp	*tmp;
 
-int	check_d_q(char chr, int *d_quote)
-{
-	if (chr == '\"' && *d_quote == 1)
-		*d_quote = 0;
-	else if (chr == '\"' && *d_quote == 0)
-		*d_quote = 1;
-	return (*d_quote);
+	cur = node->temp;
+	while (cur->next)
+	{
+		tmp = cur->next;
+		free(cur->args);
+		free(cur);
+		cur = tmp;
+	}
 }

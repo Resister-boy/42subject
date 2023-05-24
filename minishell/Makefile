@@ -6,7 +6,7 @@
 #    By: jaehulee <jaehulee@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/11 16:21:07 by jaehulee          #+#    #+#              #
-#    Updated: 2023/05/19 16:51:03 by jaehulee         ###   ########.fr        #
+#    Updated: 2023/05/24 18:32:46 by jaehulee         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,15 +19,21 @@ SOURCES = ./minishell.c \
 		./get_node.c \
 		./get_redir.c \
 		./get_cmd.c \
+		./parse_utils.c \
+		./free_utils.c \
+		./total_join.c \
+		./check_space.c \
+		./expansion.c \
 		./lib/ft_substr.c \
 		./lib/ft_strncmp.c \
 		./lib/ft_strlen.c \
+		./lib/ft_strslen.c \
 		./lib/ft_strlcpy.c \
 		./lib/ft_strjoin.c \
 		./lib/ft_strdup.c \
 		./lib/ft_strsdup.c \
 		./lib/ft_split.c \
-		./test/print.c 
+		./test/print_pipe.c
 
 OBJECTS = $(SOURCES:.c=.o)
 
