@@ -6,7 +6,7 @@
 /*   By: jaehulee <jaehulee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 18:05:59 by jaehulee          #+#    #+#             */
-/*   Updated: 2023/05/29 08:41:20 by jaehulee         ###   ########.fr       */
+/*   Updated: 2023/05/31 03:18:19 by jaehulee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,11 @@ static void	print_cmd(t_pipe *node)
 
 	i = 0;
 	strs = node->cmds;
+	if (!strs)
+	{
+		printf("No Command!\n");
+		return ;
+	}
 	while (strs[i])
 	{
 		printf("cmds: %s\n", strs[i]);
@@ -32,15 +37,15 @@ static void	print_redir(t_pipe *node)
 
 	cur = node->redir;
 	if (!cur)
-		printf("No redirection!\n");
-	else
 	{
-		while (cur)
-		{
-			printf("redir->type: %d\n", cur->type);
-			printf("redir->filename: %s\n", cur->filename);
-			cur = cur->next;
-		}
+		printf("No redirection!\n");
+		return ;
+	}
+	while (cur)
+	{
+		printf("redir->type: %d\n", cur->type);
+		printf("redir->filename: %s\n", cur->filename);
+		cur = cur->next;
 	}
 }
 

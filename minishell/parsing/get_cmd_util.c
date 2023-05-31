@@ -6,7 +6,7 @@
 /*   By: jaehulee <jaehulee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 05:08:33 by jaehulee          #+#    #+#             */
-/*   Updated: 2023/05/29 08:11:30 by jaehulee         ###   ########.fr       */
+/*   Updated: 2023/05/31 15:27:39 by jaehulee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ static char	*get_cmd_path(char **paths, char *str)
 char	*get_env_path(char **envp, char *str)
 {
 	char	*path;
+	char	*program;
 	char	**paths;
 	size_t	i;
 
@@ -42,7 +43,8 @@ char	*get_env_path(char **envp, char *str)
 		i++;
 	}
 	paths = ft_split(envp[i], ':');
-	path = get_cmd_path(paths, ft_strjoin("/", str));
+	program = ft_strjoin("/", str);
+	path = get_cmd_path(paths, program);
 	if (!path)
 		return (str);
 	return (path);

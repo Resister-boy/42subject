@@ -6,7 +6,7 @@
 /*   By: jaehulee <jaehulee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 13:38:31 by jaehulee          #+#    #+#             */
-/*   Updated: 2023/05/29 04:17:24 by jaehulee         ###   ########.fr       */
+/*   Updated: 2023/05/31 14:15:05 by jaehulee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	check_dollar(char *str)
 	i = 0;
 	while (str[i])
 	{
-		if (str[i] == '$')
+		if (is_valid_dollar(str, i))
 			return (1);
 		i++;
 	}
@@ -58,6 +58,8 @@ int	is_all_space(char *str)
 	size_t	i;
 
 	i = 0;
+	if (!str)
+		return (0);
 	while (str[i])
 	{
 		if (ft_isspace(str[i]))

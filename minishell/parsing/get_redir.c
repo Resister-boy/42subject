@@ -6,28 +6,28 @@
 /*   By: jaehulee <jaehulee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 17:08:41 by jaehulee          #+#    #+#             */
-/*   Updated: 2023/05/29 08:27:19 by jaehulee         ###   ########.fr       */
+/*   Updated: 2023/05/31 16:42:25 by jaehulee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	connect_redir(t_io **r_list, t_io *redir)
+void	connect_redir(t_pipe *node, t_io *redirection)
 {
 	t_io	*cur;
 
-	cur = (*r_list);
+	cur = node->redir;
 	if (!cur)
-		(*r_list) = redir;
+		node->redir = redirection;
 	else
 	{
 		while (cur->next)
 			cur = cur->next;
-		cur->next = redir;
+		cur->next = redirection;
 	}
 }
 
-int	parse_out_redir(char *cmd, size_t idx, t_io **r_list)
+int	parse_out_redir(t_pipe *node, char *cmd, size_t idx)
 {
 	size_t	start;
 	t_io	*redir;
@@ -38,7 +38,7 @@ int	parse_out_redir(char *cmd, size_t idx, t_io **r_list)
 		(redir->type) = REDIR_DOUBLE_OUT;
 		(idx) += 2;
 	}
-	else if (cmd[(idx) + 1] != '>')
+	else
 	{
 		(redir->type) = REDIR_SINGLE_OUT;
 		(idx) += 1;
@@ -50,11 +50,11 @@ int	parse_out_redir(char *cmd, size_t idx, t_io **r_list)
 		(idx)++;
 	redir->filename = ft_substr(cmd, start, (idx) - start);
 	redir->next = NULL;
-	connect_redir(r_list, redir);
+	connect_redir(node, redir);
 	return (idx);
 }
 
-int	parse_in_redir(char *cmd, size_t idx, t_io **r_list)
+int	parse_in_redir(t_pipe *node, char *cmd, size_t idx)
 {
 	size_t	start;
 	t_io	*redir;
@@ -65,7 +65,7 @@ int	parse_in_redir(char *cmd, size_t idx, t_io **r_list)
 		(redir->type) = REDIR_DOUBLE_IN;
 		(idx) += 2;
 	}
-	else if (cmd[(idx) + 1] == '<')
+	else
 	{
 		(redir->type) = REDIR_SINGLE_IN;
 		(idx) += 1;
@@ -77,6 +77,6 @@ int	parse_in_redir(char *cmd, size_t idx, t_io **r_list)
 		(idx)++;
 	redir->filename = ft_substr(cmd, start, (idx) - start);
 	redir->next = NULL;
-	connect_redir(r_list, redir);
+	connect_redir(node, redir);
 	return (idx);
 }

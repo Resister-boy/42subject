@@ -6,7 +6,7 @@
 /*   By: jaehulee <jaehulee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 15:11:09 by jaehulee          #+#    #+#             */
-/*   Updated: 2023/05/29 07:54:22 by jaehulee         ###   ########.fr       */
+/*   Updated: 2023/05/31 16:44:59 by jaehulee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ int		parse_prompt(t_pipe_manager *p_man, char **envp, char *prompt);
 t_pipe	*get_lastnode(t_pipe_manager *p_man);
 
 // get_cmd.c
-int		parse_cmd(t_pipe_manager *p_man, char *prompt, size_t idx);
+int		parse_cmd(t_pipe *node, char *prompt, size_t idx);
 size_t	get_tmpsize(t_pipe *node);
 char	**change_cmds(t_pipe *node, char **envp);
 int		check_dollar(char *str);
@@ -101,17 +101,16 @@ int		check_dollar(char *str);
 char	*get_env_path(char **envp, char *str);
 
 // get_redir.c
-int		parse_in_redir(char *cmd, size_t idx, t_io **r_list);
-int		parse_out_redir(char *cmd, size_t idx, t_io **r_list);
-void	connect_redir(t_io **r_list, t_io *redir);
+int		parse_in_redir(t_pipe *node, char *cmd, size_t idx);
+int		parse_out_redir(t_pipe *node, char *cmd, size_t idx);
+void	connect_redir(t_pipe *node, t_io *redirection);
 
 // parse_utils.c
 t_tmp	*get_lasttmp(t_pipe *pipe);
 int		check_quote(char chr, int *status);
-int		parse_no_q(t_pipe_manager *p_man, char *prompt, size_t idx, \
-t_io **r_list);
-int		parse_single_q(t_pipe_manager *p_man, char *prompt, size_t idx);
-int		parse_double_q(t_pipe_manager *p_man, char *prompt, size_t idx);
+int		parse_no_q(t_pipe *node, char *prompt, size_t idx);
+int		parse_single_q(t_pipe *node, char *prompt, size_t idx);
+int		parse_double_q(t_pipe *node, char *prompt, size_t idx);
 
 // free_utils.c
 void	free_tmps(t_pipe *node);
@@ -126,9 +125,11 @@ void	expand_env_quote(char *buf, t_tmp *temp);
 char	*get_envname(char *str, size_t *idx);
 
 // expansion_util.c
-void	connect_cmd_tmp(char **buf, t_pipe *node);
+void	connect_cmd_tmp(char *str, t_pipe *node);
 void	handle_expand(char *str, t_pipe *node);
 void	get_temp(char *str, t_pipe *node);
+size_t	get_dollar_count(char *str);
+int		is_valid_dollar(char *str, size_t idx);
 
 // libft_util
 char	**ft_strsdup(char **strs);
@@ -137,7 +138,6 @@ size_t	ft_strslen(char **strs);
 // test
 void	print_pipe(t_pipe_manager *p_man);
 
-void	connect_cmd_tmp(char **buf, t_pipe *node);
 int		is_all_space(char *str);
 
 ///////////////

@@ -6,7 +6,7 @@
 /*   By: jaehulee <jaehulee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 17:18:52 by jaehulee          #+#    #+#             */
-/*   Updated: 2023/05/29 08:54:26 by jaehulee         ###   ########.fr       */
+/*   Updated: 2023/05/31 15:41:19 by jaehulee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,16 @@ t_pipe	*get_lastnode(t_pipe_manager *p_man)
 	return (cur);
 }
 
+static void	init_pipe_node(t_pipe *node)
+{
+	if (!node)
+		return ;
+	node->cmds = NULL;
+	node->next = NULL;
+	node->redir = NULL;
+	node->temp = NULL;
+}
+
 static int	is_valid_pipe(char *prompt, size_t *idx, int status)
 {
 	if ((*idx) == 0)
@@ -38,61 +48,45 @@ static int	is_valid_pipe(char *prompt, size_t *idx, int status)
 	return (0);
 }
 
-static void	create_pipe_node(t_pipe_manager *p_man)
+static t_pipe	*create_pipe_node(t_pipe_manager *p_man, char **envp)
 {
 	t_pipe	*new;
 	t_pipe	*last;
 
 	new = (t_pipe *)malloc(sizeof(t_pipe));
-	new->cmds = NULL;
-	new->next = NULL;
-	new->redir = NULL;
-	new->temp = NULL;
+	init_pipe_node(new);
 	last = get_lastnode(p_man);
 	if (last == NULL)
 		p_man->head = new;
 	else
-		last->next = new;
-}
-
-static void	get_content(t_pipe_manager *p_man, char **envp, t_io *r_list)
-{
-	t_pipe	*last;
-
-	last = get_lastnode(p_man);
-	if (r_list)
-		last->redir = r_list;
-	else
-		last->redir = NULL;
-	if (last->temp)
+	{
 		last->cmds = change_cmds(last, envp);
-	else
-		last->cmds = NULL;
+		last->next = new;
+	}
+	return (new);
 }
 
 int	parse_prompt(t_pipe_manager *p_man, char **envp, char *prompt)
 {
 	size_t	i;
-	size_t	len;
 	int		status;
-	t_io	*redir;
+	t_pipe	*last;
 
 	i = 0;
 	status = 0;
-	len = ft_strlen(prompt);
-	redir = NULL;
+	if (!envp)
+		return (0);
 	while (prompt[i])
 	{
 		if (is_valid_pipe(prompt, &i, status))
-			create_pipe_node(p_man);
+			last = create_pipe_node(p_man, envp);
 		if (check_quote(prompt[i], &status) == NO_QUOTE)
-			i = parse_no_q(p_man, prompt, i, &redir);
+			i = parse_no_q(last, prompt, i);
 		else if (check_quote(prompt[i], &status) == SINGLE_QUOTE)
-			i = parse_single_q(p_man, prompt, i);
+			i = parse_single_q(last, prompt, i);
 		else if (check_quote(prompt[i], &status) == DOUBLE_QUOTE)
-			i = parse_double_q(p_man, prompt, i);
-		if (i == len || is_valid_pipe(prompt, &i, status))
-			get_content(p_man, envp, redir);
+			i = parse_double_q(last, prompt, i);
 	}
+	(last->cmds) = change_cmds(last, envp);
 	return (1);
 }

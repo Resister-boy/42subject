@@ -6,13 +6,21 @@
 /*   By: jaehulee <jaehulee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 14:29:42 by jaehulee          #+#    #+#             */
-/*   Updated: 2023/05/29 08:34:28 by jaehulee         ###   ########.fr       */
+/*   Updated: 2023/05/31 18:20:09 by jaehulee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-static size_t	get_dollar_count(char *str)
+int	is_valid_dollar(char *str, size_t idx)
+{
+	if (str[idx] == '$' && str[idx + 1] && (ft_isalpha(str[idx + 1]) \
+	|| str[idx + 1] == '_'))
+		return (1);
+	return (0);
+}
+
+size_t	get_dollar_count(char *str)
 {
 	size_t	i;
 	size_t	count;
@@ -21,22 +29,20 @@ static size_t	get_dollar_count(char *str)
 	count = 0;
 	while (str[i])
 	{
-		if (str[i] == '$' && (str[i + 1] || str[i + 1] != '$'))
+		if (is_valid_dollar(str, i))
 			count++;
 		i++;
 	}
 	return (count);
 }
 
-void	connect_cmd_tmp(char **buf, t_pipe *node)
+void	connect_cmd_tmp(char *str, t_pipe *node)
 {
 	size_t	i;
-	char	*str;
 	char	**n_buf;
 	t_tmp	*last;
 
 	i = 0;
-	str = total_join(buf);
 	last = get_lasttmp(node);
 	if (!is_all_space(str))
 		get_temp(str, node);
@@ -54,24 +60,23 @@ void	connect_cmd_tmp(char **buf, t_pipe *node)
 void	handle_expand(char *str, t_pipe *node)
 {
 	size_t	i;
-	size_t	j;
 	size_t	start;
-	size_t	dollar_cnt;
 
 	i = 0;
-	dollar_cnt = get_dollar_count(str);
-	while (i < dollar_cnt)
+	while (str[i])
 	{
-		j = 0;
-		while (str[j] && str[j] != '$')
-			j++;
-		if (str[j] == '$')
+		start = i;
+		while (str[i] && str[i] != '$')
+			i++;
+		if (start < i)
+			get_temp(ft_substr(str, start, i - start), node);
+		if (is_valid_dollar(str, i))
 		{
-			start = j++;
-			while (str[j] && str[j] != '$')
-				j++;
-			expand_env(ft_substr(str, start, j - start), node);
+			i++;
+			start = i;
+			while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))
+				i++;
+			expand_env(ft_substr(str, start, i - start), node);
 		}
-		i++;
 	}
 }

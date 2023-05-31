@@ -6,13 +6,13 @@
 /*   By: jaehulee <jaehulee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 04:00:34 by jaehulee          #+#    #+#             */
-/*   Updated: 2023/05/29 08:48:39 by jaehulee         ###   ########.fr       */
+/*   Updated: 2023/05/31 15:42:43 by jaehulee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./../minishell.h"
+#include "minishell.h"
 
-int	parse_no_q(t_pipe_manager *p_man, char *prompt, size_t idx, t_io **r_list)
+int	parse_no_q(t_pipe *node, char *prompt, size_t idx)
 {
 	while (prompt[idx] && ft_isspace(prompt[idx]))
 		idx++;
@@ -20,23 +20,21 @@ int	parse_no_q(t_pipe_manager *p_man, char *prompt, size_t idx, t_io **r_list)
 	prompt[idx] != '\"')
 	{
 		if (prompt[idx] == '<')
-			idx = parse_in_redir(prompt, idx, r_list);
+			idx = parse_in_redir(node, prompt, idx);
 		else if (prompt[idx] == '>')
-			idx = parse_out_redir(prompt, idx, r_list);
+			idx = parse_out_redir(node, prompt, idx);
 		else if (prompt[idx] != ft_isspace(prompt[idx]))
-			idx = parse_cmd(p_man, prompt, idx);
+			idx = parse_cmd(node, prompt, idx);
 	}
 	return (idx);
 }
 
-int	parse_single_q(t_pipe_manager *p_man, char *prompt, size_t idx)
+int	parse_single_q(t_pipe *node, char *prompt, size_t idx)
 {
-	t_pipe	*node;
 	t_tmp	*new;
 	size_t	start;
 
 	start = idx;
-	node = get_lastnode(p_man);
 	while (prompt[idx] && prompt[idx] != '\'')
 		idx++;
 	new = (t_tmp *)malloc(sizeof(t_tmp));
@@ -50,16 +48,14 @@ int	parse_single_q(t_pipe_manager *p_man, char *prompt, size_t idx)
 	return (idx);
 }
 
-int	parse_double_q(t_pipe_manager *p_man, char *prompt, size_t idx)
+int	parse_double_q(t_pipe *node, char *prompt, size_t idx)
 {
-	t_pipe	*node;
 	size_t	start;
 	t_tmp	*new;
 	char	*str;
 
 	idx++;
 	start = idx;
-	node = get_lastnode(p_man);
 	while (prompt[idx] && prompt[idx] != '\"')
 		idx++;
 	new = (t_tmp *)malloc(sizeof(t_tmp));

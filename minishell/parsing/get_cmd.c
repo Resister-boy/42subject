@@ -6,7 +6,7 @@
 /*   By: jaehulee <jaehulee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 16:23:54 by jaehulee          #+#    #+#             */
-/*   Updated: 2023/05/29 08:42:22 by jaehulee         ###   ########.fr       */
+/*   Updated: 2023/05/31 15:29:34 by jaehulee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,12 @@ t_tmp	*get_lasttmp(t_pipe *pipe)
 	return (temp);
 }
 
-int	parse_cmd(t_pipe_manager *p_man, char *prompt, size_t idx)
+int	parse_cmd(t_pipe *node, char *prompt, size_t idx)
 {
-	t_pipe	*node;
 	size_t	start;
 	char	*str;
 
 	start = idx;
-	node = get_lastnode(p_man);
 	while (prompt[idx] && !ft_isspace(prompt[idx]))
 		idx++;
 	str = ft_substr(prompt, start, idx - start);
@@ -48,7 +46,10 @@ void	get_temp(char *str, t_pipe *node)
 	t_tmp	*last;
 
 	tmp = (t_tmp *)malloc(sizeof(t_tmp));
-	tmp->args = ft_strdup(str);
+	if (!str)
+		tmp->args = ft_strdup("");
+	else
+		tmp->args = ft_strdup(str);
 	tmp->next = NULL;
 	last = get_lasttmp(node);
 	if (!last)
@@ -79,14 +80,19 @@ char	**change_cmds(t_pipe *node, char **envp)
 	size_t	i;
 	size_t	len;
 	t_tmp	*tmp;
+	char	*path;
 	char	**cmds;
 
 	i = 1;
+	if (!(node->temp))
+		return (NULL);
 	tmp = node->temp;
-	len = get_tmpsize(node) + 1;
+	len = get_tmpsize(node);
 	cmds = (char **)malloc(sizeof(char *) * (len + 1));
 	cmds[len] = NULL;
-	cmds[0] = get_env_path(envp, tmp->args);
+	path = get_env_path(envp, tmp->args);
+	cmds[0] = ft_strjoin(path, ft_strjoin("/", (tmp->args)));
+	tmp = tmp->next;
 	while (tmp)
 	{
 		cmds[i] = ft_strdup(tmp->args);
