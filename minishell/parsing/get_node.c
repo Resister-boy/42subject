@@ -6,7 +6,7 @@
 /*   By: jaehulee <jaehulee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 17:18:52 by jaehulee          #+#    #+#             */
-/*   Updated: 2023/05/31 15:41:19 by jaehulee         ###   ########.fr       */
+/*   Updated: 2023/06/06 14:01:09 by jaehulee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,13 @@ static int	is_valid_pipe(char *prompt, size_t *idx, int status)
 		return (1);
 	if (status == NO_QUOTE)
 	{
-		while (prompt[(*idx)] && prompt[(*idx)] == ft_isspace(prompt[(*idx)]))
+		while (prompt[(*idx)] && ft_isspace(prompt[(*idx)]))
 			(*idx)++;
-		if (prompt[(*idx) + 1] == '|')
+		if (prompt[(*idx)] == '|')
+		{
+			(*idx)++;
 			return (1);
+		}
 	}
 	return (0);
 }
@@ -80,11 +83,12 @@ int	parse_prompt(t_pipe_manager *p_man, char **envp, char *prompt)
 	{
 		if (is_valid_pipe(prompt, &i, status))
 			last = create_pipe_node(p_man, envp);
-		if (check_quote(prompt[i], &status) == NO_QUOTE)
+		status = check_quote(prompt[i], status);
+		if (status == NO_QUOTE)
 			i = parse_no_q(last, prompt, i);
-		else if (check_quote(prompt[i], &status) == SINGLE_QUOTE)
+		else if (status == SINGLE_QUOTE)
 			i = parse_single_q(last, prompt, i);
-		else if (check_quote(prompt[i], &status) == DOUBLE_QUOTE)
+		else if (status == DOUBLE_QUOTE)
 			i = parse_double_q(last, prompt, i);
 	}
 	(last->cmds) = change_cmds(last, envp);

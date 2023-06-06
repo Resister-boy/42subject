@@ -6,7 +6,7 @@
 /*   By: jaehulee <jaehulee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 13:38:31 by jaehulee          #+#    #+#             */
-/*   Updated: 2023/05/31 14:15:05 by jaehulee         ###   ########.fr       */
+/*   Updated: 2023/06/06 13:57:49 by jaehulee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,22 +26,22 @@ int	check_dollar(char *str)
 	return (0);
 }
 
-int	check_quote(char chr, int *status)
+int	check_quote(char chr, int status)
 {
-	if ((*status) == 0 && chr == '\'')
+	if ((status) == 0 && chr == '\'')
 	{
-		(*status) = 1;
+		(status) = 1;
 		return (1);
 	}
-	else if ((*status) == 0 && chr == '\"')
+	else if ((status) == 0 && chr == '\"')
 	{
-		(*status) = 2;
+		(status) = 2;
 		return (2);
 	}
-	else if (((*status) == 1) && (chr == '\''))
-		(*status) = 0;
-	else if (((*status) == 2) && (chr == '\"'))
-		(*status) = 0;
+	else if (((status) == 1) && (chr == '\''))
+		(status) = 0;
+	else if (((status) == 2) && (chr == '\"'))
+		(status) = 0;
 	return (0);
 }
 

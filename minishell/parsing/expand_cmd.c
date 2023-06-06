@@ -1,28 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   expansion.c                                        :+:      :+:    :+:   */
+/*   expand_cmd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jaehulee <jaehulee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/24 01:56:29 by jaehulee          #+#    #+#             */
-/*   Updated: 2023/05/31 15:13:50 by jaehulee         ###   ########.fr       */
+/*   Created: 2023/06/03 06:13:26 by jaehulee          #+#    #+#             */
+/*   Updated: 2023/06/06 16:11:25 by jaehulee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "minishell.h"
 
-char	*get_envname(char *str, size_t *idx)
+void	expand_env_cmd(char *str, t_pipe *node)
 {
-	size_t	start;
+	char	*expanded;
 
-	start = (*idx) + 1;
-	if (!str[start] || !ft_isalpha(str[start]) || str[start] == '_')
-		return (ft_strdup(""));
-	while (str[(*idx)] && !ft_isspace(str[(*idx)]) && str[(*idx)] != '$' && \
-	(ft_isalpha(str[(*idx)]) || ft_isdigit(str[(*idx)]) || str[(*idx)] == '_'))
-		(*idx)++;
-	return (ft_substr(str, start, (*idx)));
+	expanded = getenv(str);
+	connect_cmd_tmp(expanded, node);
 }
 
 void	expand_env_quote(char *str, t_tmp *temp)
@@ -52,10 +47,45 @@ void	expand_env_quote(char *str, t_tmp *temp)
 	temp->args = total_join(buf);
 }
 
-void	expand_env(char *str, t_pipe *node)
+void	connect_cmd_tmp(char *str, t_pipe *node)
 {
-	char	*expanded;
+	size_t	i;
+	char	**n_buf;
 
-	expanded = getenv(str);
-	connect_cmd_tmp(expanded, node);
+	i = 0;
+	if (!is_all_space(str))
+		get_temp(str, node);
+	else
+	{
+		n_buf = ft_split(str, ' ');
+		while (n_buf[i])
+		{
+			get_temp(n_buf[i], node);
+			i++;
+		}
+	}
+}
+
+void	handle_expand(char *str, t_pipe *node)
+{
+	size_t	i;
+	size_t	start;
+
+	i = 0;
+	while (str[i] && !ft_isspace(str[i]))
+	{
+		start = i;
+		while (str[i] && str[i] != '$')
+			i++;
+		if (start < i)
+			get_temp(ft_substr(str, start, i - start), node);
+		if (is_valid_dollar(str, i))
+		{
+			i++;
+			start = i;
+			while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))
+				i++;
+			expand_env_cmd(ft_substr(str, start, i - start), node);
+		}
+	}
 }

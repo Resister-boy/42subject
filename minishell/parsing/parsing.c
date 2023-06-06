@@ -6,7 +6,7 @@
 /*   By: jaehulee <jaehulee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 04:00:34 by jaehulee          #+#    #+#             */
-/*   Updated: 2023/05/31 15:42:43 by jaehulee         ###   ########.fr       */
+/*   Updated: 2023/06/06 13:57:49 by jaehulee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ int	parse_single_q(t_pipe *node, char *prompt, size_t idx)
 	t_tmp	*new;
 	size_t	start;
 
+	idx++;
 	start = idx;
 	while (prompt[idx] && prompt[idx] != '\'')
 		idx++;

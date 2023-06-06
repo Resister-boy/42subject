@@ -6,7 +6,7 @@
 /*   By: jaehulee <jaehulee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 15:11:09 by jaehulee          #+#    #+#             */
-/*   Updated: 2023/05/31 16:44:59 by jaehulee         ###   ########.fr       */
+/*   Updated: 2023/06/06 12:24:56 by jaehulee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,18 +41,19 @@ enum	e_redir
 	AMBIGUOUS_REDIR,
 };
 
-typedef struct s_io
-{
-	enum e_redir	type;
-	char			*filename;
-	struct s_io		*next;
-}	t_io;
-
 typedef struct s_tmp
 {
 	char			*args;
 	struct s_tmp	*next;
 }	t_tmp;
+
+typedef struct s_io
+{
+	enum e_redir	type;
+	char			*temp;
+	char			*filename;
+	struct s_io		*next;
+}	t_io;
 
 typedef struct s_pipe
 {
@@ -107,7 +108,7 @@ void	connect_redir(t_pipe *node, t_io *redirection);
 
 // parse_utils.c
 t_tmp	*get_lasttmp(t_pipe *pipe);
-int		check_quote(char chr, int *status);
+int		check_quote(char chr, int status);
 int		parse_no_q(t_pipe *node, char *prompt, size_t idx);
 int		parse_single_q(t_pipe *node, char *prompt, size_t idx);
 int		parse_double_q(t_pipe *node, char *prompt, size_t idx);
@@ -120,9 +121,10 @@ size_t	total_len(char **str);
 char	*total_join(char **str);
 
 // expansion.c
-void	expand_env(char *buf, t_pipe *node);
+void	expand_env_cmd(char *str, t_pipe *node);
+char	*expand_env_redir(char *str);
 void	expand_env_quote(char *buf, t_tmp *temp);
-char	*get_envname(char *str, size_t *idx);
+void	handle_redir_expand(char *str, t_io *redir);
 
 // expansion_util.c
 void	connect_cmd_tmp(char *str, t_pipe *node);
