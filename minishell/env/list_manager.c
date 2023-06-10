@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   list_manager.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaehulee <jaehulee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: seonghle <seonghle@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 20:20:43 by seonghle          #+#    #+#             */
-/*   Updated: 2023/05/29 07:30:20 by jaehulee         ###   ########.fr       */
+/*   Updated: 2023/05/30 20:14:02 by seonghle         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "minishell.h"
 
 t_env	*make_node(char *key, char *value)
 {

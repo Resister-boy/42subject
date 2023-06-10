@@ -6,11 +6,11 @@
 /*   By: seonghle <seonghle@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 15:15:50 by seonghle          #+#    #+#             */
-/*   Updated: 2023/05/26 17:06:45 by seonghle         ###   ########seoul.kr  */
+/*   Updated: 2023/05/30 20:14:02 by seonghle         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "minishell.h"
 
 static int	print_env(t_env_manager *env_manager)
 {

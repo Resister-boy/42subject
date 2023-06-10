@@ -6,11 +6,11 @@
 /*   By: seonghle <seonghle@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 16:37:29 by seonghle          #+#    #+#             */
-/*   Updated: 2023/05/26 17:06:38 by seonghle         ###   ########seoul.kr  */
+/*   Updated: 2023/05/30 20:14:02 by seonghle         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "minishell.h"
 
 static int	ft_cd_oldpwd(t_env_manager *env)
 {

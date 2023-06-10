@@ -5,87 +5,103 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: jaehulee <jaehulee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/03 06:13:26 by jaehulee          #+#    #+#             */
-/*   Updated: 2023/06/06 16:11:25 by jaehulee         ###   ########.fr       */
+/*   Created: 2023/06/10 17:59:36 by jaehulee          #+#    #+#             */
+/*   Updated: 2023/06/10 20:51:20 by jaehulee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	expand_env_cmd(char *str, t_pipe *node)
-{
-	char	*expanded;
-
-	expanded = getenv(str);
-	connect_cmd_tmp(expanded, node);
-}
-
-void	expand_env_quote(char *str, t_tmp *temp)
+static void	no_quote_expand_util(char *str, size_t idx, char **buf, \
+t_env_manager *e_man)
 {
 	size_t	i;
-	size_t	k;
-	size_t	len;
 	size_t	start;
+	t_env	*env;
+
+	i = 0;
+	while (str[idx] && !ft_isspace(str[idx]))
+	{
+		start = idx;
+		while (str[idx] && str[idx] != '$')
+			idx++;
+		if (start < idx)
+			buf[i++] = ft_substr(str, start, idx - start);
+		if (is_valid_dollar(str, idx))
+		{
+			idx++;
+			start = idx;
+			while (str[idx] && (ft_isalnum(str[idx]) || str[idx] == '_'))
+				idx++;
+			env = expand_env_cmd(e_man, ft_substr(str, start, idx - start));
+			handle_env_result(env, buf, i);
+			i++;
+		}
+	}
+}
+
+static void	quote_cmd_expand_util(char *str, size_t idx, char **buf, \
+t_env_manager *e_man)
+{
+	size_t	i;
+	size_t	start;
+	t_env	*env;
+
+	i = 0;
+	while (str[idx] && !ft_isspace(str[idx]))
+	{
+		start = idx;
+		while (str[i] && str[idx] != '$')
+			idx++;
+		if (start < idx)
+			buf[i++] = ft_substr(str, start, idx - start);
+		if (is_valid_dollar(str, idx))
+		{
+			idx++;
+			start = idx;
+			while (str[idx] && (ft_isalnum(str[idx]) || str[idx] == '_'))
+				idx++;
+			env = expand_env_cmd(e_man, ft_substr(str, start, idx - start));
+			handle_env_result(env, buf, i);
+			i++;
+		}
+	}
+}
+
+void	no_quote_cmd_expand(char *str, t_env_manager *e_man, t_pipe *node)
+{
+	size_t	i;
+	size_t	dollar;
+	char	**buf;
+	char	*cmd;
+
+	i = 0;
+	dollar = get_dollar_count(str);
+	while (str[i] != '\0' && ft_isspace(str[i]))
+		i++;
+	if (str[i] != '$')
+		dollar += 1;
+	buf = (char **)malloc(sizeof(char *) * (dollar + 1));
+	buf[dollar] = NULL;
+	no_quote_expand_util(str, i, buf, e_man);
+	cmd = total_join(buf);
+	connect_cmd_tmp(cmd, node);
+}
+
+void	quote_cmd_expand(char *str, t_env_manager *e_man, t_tmp *temp)
+{
+	size_t	i;
+	size_t	dollar;
 	char	**buf;
 
 	i = 0;
-	k = 0;
-	len = get_dollar_count(str);
-	buf = (char **)malloc(sizeof(char *) * (len + 1));
-	buf[len] = NULL;
-	while (str[i])
-	{
-		if (str[i] && str[i++] == '$')
-		{
-			start = i;
-			while (str[i] && !ft_isspace(str[i]) && str[i] != '$')
-				i++;
-			buf[k] = getenv(ft_substr(str, start, i));
-		}
-		k++;
-	}
+	dollar = get_dollar_count(str);
+	while (str[i] != '\0' && ft_isspace(str[i]) && str[i] != '\"')
+		i++;
+	if (str[i] == '\"' && str[i + 1] == '$')
+		dollar += 1;
+	buf = (char **)malloc(sizeof(char *) * (dollar + 1));
+	buf[dollar] = NULL;
+	quote_cmd_expand_util(str, i, buf, e_man);
 	temp->args = total_join(buf);
-}
-
-void	connect_cmd_tmp(char *str, t_pipe *node)
-{
-	size_t	i;
-	char	**n_buf;
-
-	i = 0;
-	if (!is_all_space(str))
-		get_temp(str, node);
-	else
-	{
-		n_buf = ft_split(str, ' ');
-		while (n_buf[i])
-		{
-			get_temp(n_buf[i], node);
-			i++;
-		}
-	}
-}
-
-void	handle_expand(char *str, t_pipe *node)
-{
-	size_t	i;
-	size_t	start;
-
-	i = 0;
-	while (str[i] && !ft_isspace(str[i]))
-	{
-		start = i;
-		while (str[i] && str[i] != '$')
-			i++;
-		if (start < i)
-			get_temp(ft_substr(str, start, i - start), node);
-		if (is_valid_dollar(str, i))
-		{
-			i++;
-			start = i;
-			while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))
-				i++;
-			expand_env_cmd(ft_substr(str, start, i - start), node);
-		}
-	}
 }

@@ -5,12 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: jaehulee <jaehulee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/26 14:29:42 by jaehulee          #+#    #+#             */
-/*   Updated: 2023/06/06 15:33:06 by jaehulee         ###   ########.fr       */
+/*   Created: 2023/06/10 18:05:01 by jaehulee          #+#    #+#             */
+/*   Updated: 2023/06/10 20:50:10 by jaehulee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "minishell.h"
 
 int	is_valid_dollar(char *str, size_t idx)
 {
@@ -18,6 +18,14 @@ int	is_valid_dollar(char *str, size_t idx)
 	|| str[idx + 1] == '_'))
 		return (1);
 	return (0);
+}
+
+void	handle_env_result(t_env *env, char **buf, size_t i)
+{
+	if (env == NULL)
+		buf[i] = ft_strdup("");
+	else
+		buf[i] = env->value;
 }
 
 size_t	get_dollar_count(char *str)

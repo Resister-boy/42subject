@@ -6,11 +6,11 @@
 /*   By: jaehulee <jaehulee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 02:13:06 by jaehulee          #+#    #+#             */
-/*   Updated: 2023/06/05 16:44:31 by jaehulee         ###   ########.fr       */
+/*   Updated: 2023/06/10 17:44:42 by jaehulee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "minishell.h"
 
 size_t	total_len(char **str)
 {

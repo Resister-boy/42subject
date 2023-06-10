@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   check_utils.c                                      :+:      :+:    :+:   */
+/*   check_util.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jaehulee <jaehulee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 13:38:31 by jaehulee          #+#    #+#             */
-/*   Updated: 2023/06/06 13:57:49 by jaehulee         ###   ########.fr       */
+/*   Updated: 2023/06/10 18:12:07 by jaehulee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "minishell.h"
 
 int	check_dollar(char *str)
 {
@@ -66,5 +66,12 @@ int	is_all_space(char *str)
 			return (1);
 		i++;
 	}
+	return (0);
+}
+
+int	is_operator(char chr)
+{
+	if (chr == '|' || chr == '<' || chr == '>')
+		return (1);
 	return (0);
 }

@@ -1,29 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_utils.c                                       :+:      :+:    :+:   */
+/*   expand_cmd_util.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jaehulee <jaehulee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/24 13:34:06 by jaehulee          #+#    #+#             */
-/*   Updated: 2023/05/29 08:40:40 by jaehulee         ###   ########.fr       */
+/*   Created: 2023/06/10 18:02:44 by jaehulee          #+#    #+#             */
+/*   Updated: 2023/06/10 18:03:34 by jaehulee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "minishell.h"
 
-void	free_tmps(t_pipe *node)
+t_env	*expand_env_cmd(t_env_manager *e_man, char *str)
 {
-	t_tmp	*cur;
-	t_tmp	*tmp;
+	t_env	*expanded;
 
-	cur = node->temp;
-	while (cur)
+	expanded = get_env(e_man->head, str);
+	return (expanded);
+}
+
+void	connect_cmd_tmp(char *cmd, t_pipe *node)
+{
+	size_t	i;
+	char	**n_buf;
+
+	i = 0;
+	if (!is_all_space(cmd))
+		get_temp(cmd, node);
+	else
 	{
-		tmp = cur->next;
-		free(cur->args);
-		free(cur);
-		cur = tmp;
+		n_buf = ft_split(cmd, ' ');
+		while (n_buf[i])
+		{
+			get_temp(n_buf[i], node);
+			i++;
+		}
 	}
-	node->temp = NULL;
 }
