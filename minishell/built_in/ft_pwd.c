@@ -6,11 +6,11 @@
 /*   By: seonghle <seonghle@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 13:31:49 by seonghle          #+#    #+#             */
-/*   Updated: 2023/05/26 17:06:47 by seonghle         ###   ########seoul.kr  */
+/*   Updated: 2023/05/30 20:14:02 by seonghle         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "minishell.h"
 
 int	ft_pwd(void)
 {

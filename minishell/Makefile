@@ -6,7 +6,7 @@
 #    By: jaehulee <jaehulee@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/11 16:21:07 by jaehulee          #+#    #+#              #
-#    Updated: 2023/05/31 18:20:31 by jaehulee         ###   ########.fr        #
+#    Updated: 2023/06/11 00:50:50 by jaehulee         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,8 +22,9 @@ env_path = ./env/
 
 libft_util_path = ./libft_util/
 
-parsing_srcs = parsing.c get_node.c check_utils.c expansion.c expansion_util.c free_utils.c \
-get_cmd.c get_cmd_util.c get_node.c get_redir.c total_join.c
+parsing_srcs = parse_prompt.c get_pipe_node.c check_util.c expansion_util.c \
+get_cmd.c get_cmd_util.c get_redir.c total_join.c expand_cmd.c expand_cmd_util.c \
+expand_redir.c 
 
 built_in_srcs = ft_export.c ft_unset.c ft_env.c ft_exit.c ft_echo.c ft_cd.c \
 ft_pwd.c built_in_util.c

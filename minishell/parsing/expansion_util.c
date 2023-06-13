@@ -5,12 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: jaehulee <jaehulee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/26 14:29:42 by jaehulee          #+#    #+#             */
-/*   Updated: 2023/05/31 18:20:09 by jaehulee         ###   ########.fr       */
+/*   Created: 2023/06/10 18:05:01 by jaehulee          #+#    #+#             */
+/*   Updated: 2023/06/10 20:50:10 by jaehulee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "minishell.h"
 
 int	is_valid_dollar(char *str, size_t idx)
 {
@@ -20,63 +20,38 @@ int	is_valid_dollar(char *str, size_t idx)
 	return (0);
 }
 
+void	handle_env_result(t_env *env, char **buf, size_t i)
+{
+	if (env == NULL)
+		buf[i] = ft_strdup("");
+	else
+		buf[i] = env->value;
+}
+
 size_t	get_dollar_count(char *str)
 {
 	size_t	i;
 	size_t	count;
+	int		status;
 
 	i = 0;
 	count = 0;
-	while (str[i])
+	status = 0;
+	while (str[i] && str[i] == '\"')
+		i++;
+	while (str[i] && str[i] != '\"')
 	{
 		if (is_valid_dollar(str, i))
+		{
+			status = 1;
 			count++;
+		}
+		else if (status == 1 && !ft_isalnum(str[i]))
+		{
+			count++;
+			status = 0;
+		}
 		i++;
 	}
 	return (count);
-}
-
-void	connect_cmd_tmp(char *str, t_pipe *node)
-{
-	size_t	i;
-	char	**n_buf;
-	t_tmp	*last;
-
-	i = 0;
-	last = get_lasttmp(node);
-	if (!is_all_space(str))
-		get_temp(str, node);
-	else
-	{
-		n_buf = ft_split(str, ' ');
-		while (n_buf[i])
-		{
-			get_temp(n_buf[i], node);
-			i++;
-		}
-	}	
-}
-
-void	handle_expand(char *str, t_pipe *node)
-{
-	size_t	i;
-	size_t	start;
-
-	i = 0;
-	while (str[i])
-	{
-		start = i;
-		while (str[i] && str[i] != '$')
-			i++;
-		if (start < i)
-			get_temp(ft_substr(str, start, i - start), node);
-		if (is_valid_dollar(str, i))
-		{
-			i++;
-			start = i;
-			while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))
-				i++;
-			expand_env(ft_substr(str, start, i - start), node);
-		}
-	}
 }

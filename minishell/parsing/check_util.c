@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   check_utils.c                                      :+:      :+:    :+:   */
+/*   check_util.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jaehulee <jaehulee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 13:38:31 by jaehulee          #+#    #+#             */
-/*   Updated: 2023/05/31 14:15:05 by jaehulee         ###   ########.fr       */
+/*   Updated: 2023/06/10 18:12:07 by jaehulee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "minishell.h"
 
 int	check_dollar(char *str)
 {
@@ -26,22 +26,22 @@ int	check_dollar(char *str)
 	return (0);
 }
 
-int	check_quote(char chr, int *status)
+int	check_quote(char chr, int status)
 {
-	if ((*status) == 0 && chr == '\'')
+	if ((status) == 0 && chr == '\'')
 	{
-		(*status) = 1;
+		(status) = 1;
 		return (1);
 	}
-	else if ((*status) == 0 && chr == '\"')
+	else if ((status) == 0 && chr == '\"')
 	{
-		(*status) = 2;
+		(status) = 2;
 		return (2);
 	}
-	else if (((*status) == 1) && (chr == '\''))
-		(*status) = 0;
-	else if (((*status) == 2) && (chr == '\"'))
-		(*status) = 0;
+	else if (((status) == 1) && (chr == '\''))
+		(status) = 0;
+	else if (((status) == 2) && (chr == '\"'))
+		(status) = 0;
 	return (0);
 }
 
@@ -66,5 +66,12 @@ int	is_all_space(char *str)
 			return (1);
 		i++;
 	}
+	return (0);
+}
+
+int	is_operator(char chr)
+{
+	if (chr == '|' || chr == '<' || chr == '>')
+		return (1);
 	return (0);
 }

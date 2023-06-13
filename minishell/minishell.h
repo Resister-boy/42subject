@@ -6,7 +6,7 @@
 /*   By: jaehulee <jaehulee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 15:11:09 by jaehulee          #+#    #+#             */
-/*   Updated: 2023/05/31 16:44:59 by jaehulee         ###   ########.fr       */
+/*   Updated: 2023/06/11 01:02:26 by jaehulee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,18 +41,20 @@ enum	e_redir
 	AMBIGUOUS_REDIR,
 };
 
-typedef struct s_io
-{
-	enum e_redir	type;
-	char			*filename;
-	struct s_io		*next;
-}	t_io;
-
 typedef struct s_tmp
 {
 	char			*args;
 	struct s_tmp	*next;
 }	t_tmp;
+
+typedef struct s_io
+{
+	enum e_redir	type;
+	char			*sign;
+	char			*temp;
+	char			*filename;
+	struct s_io		*next;
+}	t_io;
 
 typedef struct s_pipe
 {
@@ -81,64 +83,72 @@ typedef struct s_env_manager
 	int		size;
 }	t_env_manager;
 
-// minishell.c
-t_pipe	*get_lastnode(t_pipe_manager *p_man);
-
-// ft_isspace.c
-int		ft_isspace(char chr);
-
-// get_node.c
-int		parse_prompt(t_pipe_manager *p_man, char **envp, char *prompt);
-t_pipe	*get_lastnode(t_pipe_manager *p_man);
-
-// get_cmd.c
-int		parse_cmd(t_pipe *node, char *prompt, size_t idx);
-size_t	get_tmpsize(t_pipe *node);
-char	**change_cmds(t_pipe *node, char **envp);
-int		check_dollar(char *str);
-
-// get_cmd_util.c 
-char	*get_env_path(char **envp, char *str);
-
-// get_redir.c
-int		parse_in_redir(t_pipe *node, char *cmd, size_t idx);
-int		parse_out_redir(t_pipe *node, char *cmd, size_t idx);
-void	connect_redir(t_pipe *node, t_io *redirection);
-
-// parse_utils.c
-t_tmp	*get_lasttmp(t_pipe *pipe);
-int		check_quote(char chr, int *status);
-int		parse_no_q(t_pipe *node, char *prompt, size_t idx);
+// parse_prompt.c
+int		parse_prompt(t_pipe_manager *p_man, t_env_manager *e_man, char *prompt);
+int		parse_no_q(t_pipe *node, t_env_manager *e_man, char *prompt, \
+size_t idx);
+int		parse_double_q(t_pipe *node, t_env_manager *e_man, char *prompt, \
+size_t idx);
 int		parse_single_q(t_pipe *node, char *prompt, size_t idx);
-int		parse_double_q(t_pipe *node, char *prompt, size_t idx);
 
-// free_utils.c
-void	free_tmps(t_pipe *node);
+// get_pipe_node.c
+t_pipe	*get_lastnode(t_pipe_manager *p_man);
+t_pipe	*create_pipe_node(t_pipe_manager *p_man, t_env_manager *e_man);
+int		is_valid_pipe(char *prompt, size_t *idx, int status);
 
 // total_join.c
 size_t	total_len(char **str);
 char	*total_join(char **str);
 
-// expansion.c
-void	expand_env(char *buf, t_pipe *node);
-void	expand_env_quote(char *buf, t_tmp *temp);
-char	*get_envname(char *str, size_t *idx);
+// get_cmd.c 
+int		parse_cmd(t_pipe *node, t_env_manager *e_man, char *prompt, size_t idx);
+char	*get_env_path(t_env_manager *e_man, char *str);
+void	get_temp(char *str, t_pipe *node);
+char	**change_cmds(t_pipe *node, t_env_manager *e_man);
+
+// get_cmd_util.c
+size_t	get_tmpsize(t_pipe *node);
+t_tmp	*get_lasttmp(t_pipe *pipe);
+
+// get_redir.c
+void	init_redir(t_io *redir);
+void	connect_redir(t_pipe *node, t_env_manager *e_man, t_io *cur_redir);
+int		parse_out_redir(t_pipe *node, t_env_manager *e_man, char *cmd, \
+size_t idx);
+int		parse_in_redir(t_pipe *node, t_env_manager *e_man, char *cmd, \
+size_t idx);
+
+// expand_cmd.c
+void	no_quote_cmd_expand(char *str, t_env_manager *e_man, t_pipe *node);
+void	quote_cmd_expand(char *str, t_env_manager *e_man, t_tmp *temp);
+
+// expand_cmd_util.c
+t_env	*expand_env_cmd(t_env_manager *e_man, char *str);
+void	connect_cmd_tmp(char *cmd, t_pipe *node);
 
 // expansion_util.c
-void	connect_cmd_tmp(char *str, t_pipe *node);
-void	handle_expand(char *str, t_pipe *node);
-void	get_temp(char *str, t_pipe *node);
-size_t	get_dollar_count(char *str);
 int		is_valid_dollar(char *str, size_t idx);
+size_t	get_dollar_count(char *str);
+void	handle_env_result(t_env *env, char **buf, size_t i);
+
+// expand_redir.c
+t_env	*expand_env_redir(t_env_manager *e_man, char *str);
+void	handle_ambiguous_redir(t_io *redir, char *str);
+void	handle_redir_expand(char *str, t_env_manager *e_man, t_io *redir);
+
+// check_util.c
+int		is_operator(char chr);
+int		is_all_space(char *str);
+int		ft_isspace(char chr);
+int		check_quote(char chr, int status);
+int		check_dollar(char *str);
 
 // libft_util
 char	**ft_strsdup(char **strs);
 size_t	ft_strslen(char **strs);
 
-// test
+// test/print_pipe.c
 void	print_pipe(t_pipe_manager *p_man);
-
-int		is_all_space(char *str);
 
 ///////////////
 // execution //

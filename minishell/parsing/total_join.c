@@ -6,26 +6,25 @@
 /*   By: jaehulee <jaehulee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 02:13:06 by jaehulee          #+#    #+#             */
-/*   Updated: 2023/05/29 04:12:40 by jaehulee         ###   ########.fr       */
+/*   Updated: 2023/06/10 17:44:42 by jaehulee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "minishell.h"
 
 size_t	total_len(char **str)
 {
-	size_t	i;
-	size_t	j;
+	size_t	idx;
+	size_t	len;
 
-	i = 0;
-	j = 0;
-	while (str[i])
+	idx = 0;
+	len = 0;
+	while (str[idx] != NULL)
 	{
-		while (str[i][j])
-			j++;
-		i++;
+		len += ft_strlen(str[idx]);
+		idx++;
 	}
-	return (j);
+	return (len);
 }
 
 char	*total_join(char **str)
@@ -40,7 +39,6 @@ char	*total_join(char **str)
 	k = 0;
 	len = total_len(str);
 	joined = (char *)malloc(sizeof(char) * (len + 1));
-	joined[len] = '\0';
 	while (str[i])
 	{
 		j = 0;
@@ -48,5 +46,6 @@ char	*total_join(char **str)
 			joined[k++] = str[i][j++];
 		i++;
 	}
+	joined[len] = '\0';
 	return (joined);
 }

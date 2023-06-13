@@ -5,47 +5,38 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: jaehulee <jaehulee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/29 05:08:33 by jaehulee          #+#    #+#             */
-/*   Updated: 2023/05/31 15:27:39 by jaehulee         ###   ########.fr       */
+/*   Created: 2023/06/10 17:46:45 by jaehulee          #+#    #+#             */
+/*   Updated: 2023/06/10 17:57:55 by jaehulee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./../minishell.h"
+#include "minishell.h"
 
-static char	*get_cmd_path(char **paths, char *str)
+t_tmp	*get_lasttmp(t_pipe *pipe)
 {
-	size_t	i;
-	char	*path;
+	t_tmp	*temp;
 
-	i = 0;
-	while (paths[i])
-	{
-		path = ft_strjoin(paths[i], str);
-		if (!access(path, F_OK))
-			return (paths[i]);
-		i++;
-	}
-	return (NULL);
+	temp = pipe->temp;
+	if (!temp)
+		return (NULL);
+	while (temp->next)
+		temp = temp->next;
+	return (temp);
 }
 
-char	*get_env_path(char **envp, char *str)
+size_t	get_tmpsize(t_pipe *node)
 {
-	char	*path;
-	char	*program;
-	char	**paths;
-	size_t	i;
+	size_t	len;
+	t_tmp	*cur;
 
-	i = 0;
-	while (envp[i])
+	len = 0;
+	cur = node->temp;
+	if (!cur)
+		return (0);
+	while (cur)
 	{
-		if (!ft_strncmp(envp[i], "PATH=", 5))
-			break ;
-		i++;
+		cur = cur->next;
+		len++;
 	}
-	paths = ft_split(envp[i], ':');
-	program = ft_strjoin("/", str);
-	path = get_cmd_path(paths, program);
-	if (!path)
-		return (str);
-	return (path);
+	return (len);
 }
