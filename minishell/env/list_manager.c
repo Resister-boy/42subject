@@ -6,7 +6,7 @@
 /*   By: seonghle <seonghle@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 20:20:43 by seonghle          #+#    #+#             */
-/*   Updated: 2023/05/30 20:14:02 by seonghle         ###   ########seoul.kr  */
+/*   Updated: 2023/06/18 04:12:32 by seonghle         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,14 @@ t_env	*make_node(char *key, char *value)
 int	free_node(t_env **node)
 {
 	free((*node)->key);
+	(*node)->key = NULL;
 	if ((*node)->value)
+	{
 		free((*node)->value);
+		(*node)->value = NULL;
+	}
 	free(*node);
+	*node = NULL;
 	return (1);
 }
 

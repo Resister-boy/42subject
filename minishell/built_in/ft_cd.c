@@ -6,7 +6,7 @@
 /*   By: seonghle <seonghle@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 16:37:29 by seonghle          #+#    #+#             */
-/*   Updated: 2023/05/30 20:14:02 by seonghle         ###   ########seoul.kr  */
+/*   Updated: 2023/06/18 02:50:56 by seonghle         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,19 +22,28 @@ static int	ft_cd_oldpwd(t_env_manager *env)
 
 	old_pwd = get_env(env->head, "OLDPWD");
 	if ((!old_pwd || !old_pwd->value) && \
-	printf("minishell: cd: OLDPWD not set\n"))
+	ft_printf(2, "minishell: cd: OLDPWD not set\n"))
 		return (1);
 	pwd = get_env(env->head, "PWD");
 	if (!pwd)
 		return (0);
+	if (!*old_pwd->value)
+	{
+		ft_printf(1, "\n");
+		return (0);
+	}
 	old_pwd_path = old_pwd->value;
 	pwd_path = pwd->value;
-	if (chdir(old_pwd_path) && \
-	printf("minishell: cd: %s: No such file or directory\n", old_pwd_path))
+	if (chdir(old_pwd_path))
+	{
+		perror("cd");
 		return (1);
+	}
 	temp = old_pwd_path;
 	old_pwd_path = pwd_path;
 	pwd_path = temp;
+	old_pwd->value = old_pwd_path;
+	pwd->value = pwd_path;
 	return (0);
 }
 
@@ -71,9 +80,15 @@ int	ft_cd(char **args, t_env_manager *env_manager)
 		if (!access(args[i], F_OK))
 		{
 			current_path = getcwd(NULL, 0);
-			if (chdir(args[i]) || \
-			change_env_value(env_manager, "OLDPWD", current_path))
-				free(current_path);
+			if (!current_path || chdir(args[i]))
+			{
+				if (current_path)
+					free(current_path);
+				perror("cd");
+				return (1);
+			}
+			change_env_value(env_manager, "OLDPWD", current_path);
+			free(current_path);
 			change_env_value(env_manager, "PWD", getcwd(NULL, 0));
 		}
 		else

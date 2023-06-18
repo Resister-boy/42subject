@@ -6,7 +6,7 @@
 /*   By: seonghle <seonghle@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 20:34:17 by seonghle          #+#    #+#             */
-/*   Updated: 2023/05/26 12:03:18 by seonghle         ###   ########seoul.kr  */
+/*   Updated: 2023/06/18 05:47:24 by seonghle         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,6 @@ int	main(int argc, char **argv, char **envp)
 	else
 		printf("OLDPWD : []\n");
 	
-	free_all_node(env_manager.head);
+	free_env(&env_manager);
 	return (code);
 }

@@ -1,0 +1,32 @@
+echo '$USER'			//	$USER
+echo "$USER"			//	minckim 
+echo "'$USER'"			//	'minckim'
+echo '"$USER"'			//	"$USER"
+echo ''$USER''			//	minckim
+echo '''$USER'''		//	$USER
+echo $USER=aaa			//	minckim=aaa
+echo $HELLO=aaa			//	=aaa
+
+약간매운맛
+echo aa"bb$USER"cc		//	aabbminckimcc
+echo aa"bb$USER cc"dd	//	aabbminckim ccdd
+echo aa"bb$USERcc"dd	//	aabbdd
+echo 'qqq\'				//	qqq\
+export aa=bb=cc	&& echo aa //bb=cc
+echo "hello$USER_"		//	hello
+echo "hello\nman"		//	hello\nman
+echo hello\nman			//	hellonman
+echo "hello\ man"		//	hello\ man
+echo "hello'man"		//	hello'man
+echo "hello'man\""		//	hello'man"
+echo 'hello"man'		//	hello"man
+
+매운맛
+ec"""ho""" hello		//	hello
+ec"ho" hello			//	hello
+ec'ho' hello			//	hello
+ec"'ho'" hello			//	bash: ec'ho': command not found
+
+핵불닭볶음면맛
+echo hello '|' grep h	//	hello | grep h
+echo hello | grep h     //  hello

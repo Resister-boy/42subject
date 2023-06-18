@@ -1,28 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_pwd.c                                           :+:      :+:    :+:   */
+/*   ft_write_set_2.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: seonghle <seonghle@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/19 13:31:49 by seonghle          #+#    #+#             */
-/*   Updated: 2023/06/18 02:29:43 by seonghle         ###   ########seoul.kr  */
+/*   Created: 2022/12/17 12:59:29 by seonghle          #+#    #+#             */
+/*   Updated: 2023/06/12 15:18:15 by seonghle         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "ft_printf.h"
 
-int	ft_pwd(void)
+int	write_hex(int fd, va_list ap, int is_lowercase)
 {
-	char	*path;
+	unsigned int	arg_uint;
 
-	path = getcwd(NULL, 0);
-	if (!path)
-	{
-		perror("pwd");
-		return (1);
-	}
-	ft_printf(1, "%s\n", path);
-	free(path);
-	return (0);
+	arg_uint = va_arg(ap, unsigned int);
+	return (ft_print_hex(fd, (unsigned long long)arg_uint, is_lowercase));
+}
+
+int	wirte_percentage(int fd)
+{
+	return (write(fd, &"%", 1));
 }

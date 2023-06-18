@@ -1,28 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_pwd.c                                           :+:      :+:    :+:   */
+/*   printf_strlen.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: seonghle <seonghle@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/19 13:31:49 by seonghle          #+#    #+#             */
-/*   Updated: 2023/06/18 02:29:43 by seonghle         ###   ########seoul.kr  */
+/*   Created: 2023/06/12 15:30:28 by seonghle          #+#    #+#             */
+/*   Updated: 2023/06/12 15:30:39 by seonghle         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "ft_printf.h"
 
-int	ft_pwd(void)
+size_t	printf_strlen(const char *s)
 {
-	char	*path;
+	size_t	len;
 
-	path = getcwd(NULL, 0);
-	if (!path)
-	{
-		perror("pwd");
-		return (1);
-	}
-	ft_printf(1, "%s\n", path);
-	free(path);
-	return (0);
+	len = 0;
+	while (s[len])
+		len++;
+	return (len);
 }

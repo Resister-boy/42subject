@@ -6,42 +6,30 @@
 /*   By: jaehulee <jaehulee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 13:38:31 by jaehulee          #+#    #+#             */
-/*   Updated: 2023/06/10 18:12:07 by jaehulee         ###   ########.fr       */
+/*   Updated: 2023/06/18 22:47:09 by jaehulee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	check_dollar(char *str)
+int	check_built_in(char *str)
+{
+	if (!ft_strcmp("echo", str) || !ft_strcmp("env", str) \
+	|| !ft_strcmp("cd", str) || !ft_strcmp("export", str) \
+	|| !ft_strcmp("pwd", str) || !ft_strcmp("unset", str))
+		return (1);
+	return (0);
+}
+
+int	is_empty_prompt(char *prompt)
 {
 	size_t	i;
 
 	i = 0;
-	while (str[i])
-	{
-		if (is_valid_dollar(str, i))
-			return (1);
+	while (prompt[i] && ft_isspace(prompt[i]))
 		i++;
-	}
-	return (0);
-}
-
-int	check_quote(char chr, int status)
-{
-	if ((status) == 0 && chr == '\'')
-	{
-		(status) = 1;
+	if (ft_strlen(prompt) == i)
 		return (1);
-	}
-	else if ((status) == 0 && chr == '\"')
-	{
-		(status) = 2;
-		return (2);
-	}
-	else if (((status) == 1) && (chr == '\''))
-		(status) = 0;
-	else if (((status) == 2) && (chr == '\"'))
-		(status) = 0;
 	return (0);
 }
 

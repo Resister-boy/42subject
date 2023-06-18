@@ -6,42 +6,33 @@
 /*   By: seonghle <seonghle@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 13:47:01 by jaehulee          #+#    #+#             */
-/*   Updated: 2023/05/30 22:34:56 by seonghle         ###   ########seoul.kr  */
+/*   Updated: 2023/06/18 05:48:57 by seonghle         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void ctrl_c(int signum)
+int	g_exit_status = 0;
+
+static void	ctrl_d(t_env_manager *env_manager, char *prompt)
 {
-	if (signum != SIGINT)
-		return ;
-	write(1, "\n", 1);
-	rl_replace_line("", 1);
-	if (rl_on_new_line() == -1)
-		exit(1);
-	rl_redisplay();
+	if (!prompt && ft_printf(1, "\x1b[1A\x1b[33;1m\x1b[22m\033[15Cexit\n\033[0m"))
+		free_for_exit(env_manager, 0);
 }
 
-static void set_signal(void)
+static int	parsing(t_pipe_manager *p_man, t_env_manager *env_manager, \
+char *prompt)
 {
-	t_termios term;
-	
-	tcgetattr(STDIN_FILENO, &term);
-	term.c_lflag &= ~ECHOCTL;
-	tcsetattr(STDIN_FILENO, TCSANOW, &term);
-	signal(SIGINT, ctrl_c);
-	signal(SIGQUIT, SIG_IGN);
-}
-
-static int	parsing(t_pipe_manager *p_man, t_env_manager *env_manager, char *prompt)
-{
-	size_t	i;
-
-	i = 0;
+	if (is_empty_prompt(prompt))
+		return (0);
 	parse_prompt(p_man, env_manager, prompt);
 	print_pipe(p_man);
-	return (1);
+	return (0);
+}
+
+void	leaks(void)
+{
+	system("leaks --list minishell");
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -53,6 +44,7 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	set_signal();
+	// atexit(leaks);
 	ft_memset(&p_man, 0, sizeof(t_pipe_manager));
 	ft_memset(&env_manager, 0, sizeof(t_env_manager));
 	if (env_arr_to_list(&env_manager, envp))
@@ -60,16 +52,21 @@ int	main(int argc, char **argv, char **envp)
 	while (1)
 	{
 		prompt = readline("minishell-0.1$ ");
-		if (!prompt)
+		ctrl_d(&env_manager, prompt);
+		if (*prompt)
+			add_history(prompt);
+		if (parsing(&p_man, &env_manager, prompt))
 		{
-			ft_putstr_fd("\x1b[1A", 1);
-			ft_putstr_fd("\x1b[33;1m\x1b[22m\033[15C", 1);
-			ft_putstr_fd("exit\n\033[0m", 1);
-			exit(0);
+			free(prompt);
+			return (1);
 		}
-		if (!parsing(&p_man, &env_manager, prompt))
-			return (0);
-		add_history(prompt);
+		if (!g_exit_status)
+			ft_execution(&p_man, &env_manager);
+		else
+			ft_printf(2, "WTF %d\n", g_exit_status);
+		free_prompt(&p_man);
+		free(prompt);
 	}
+	free_env(&env_manager);
 	return (1);
 }

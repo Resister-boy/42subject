@@ -1,28 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_pwd.c                                           :+:      :+:    :+:   */
+/*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: seonghle <seonghle@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/19 13:31:49 by seonghle          #+#    #+#             */
-/*   Updated: 2023/06/18 02:29:43 by seonghle         ###   ########seoul.kr  */
+/*   Created: 2023/05/27 03:22:05 by seonghle          #+#    #+#             */
+/*   Updated: 2023/06/16 09:58:52 by seonghle         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_pwd(void)
+int	ft_execution(t_pipe_manager *p_man, t_env_manager *env_manager)
 {
-	char	*path;
-
-	path = getcwd(NULL, 0);
-	if (!path)
+	execute_redirection(p_man);
+	if (p_man->head)
 	{
-		perror("pwd");
-		return (1);
+		if (p_man->size == 1)
+			execute_single_pipe(p_man, env_manager);
+		else
+			execute_multiple_pipe(p_man, env_manager);
 	}
-	ft_printf(1, "%s\n", path);
-	free(path);
 	return (0);
 }

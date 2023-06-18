@@ -6,7 +6,7 @@
 /*   By: seonghle <seonghle@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 20:00:22 by seonghle          #+#    #+#             */
-/*   Updated: 2023/05/30 20:14:02 by seonghle         ###   ########seoul.kr  */
+/*   Updated: 2023/06/18 04:18:58 by seonghle         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ int	get_key_value(char *arg, char **key, char **value)
 	return (0);
 }
 
-// value를 밖에서 동적 할당한 것을 보낼지, 내부에서 ft_strdup로 복사할지 고민
 int	change_env_value(t_env_manager *env_manager, char *key, char *value)
 {
 	t_env	*env;
@@ -48,7 +47,10 @@ int	change_env_value(t_env_manager *env_manager, char *key, char *value)
 		return (1);
 	if (env->value)
 		free(env->value);
-	env->value = value;
+	if (!value)
+		env->value = NULL;
+	else
+		env->value = ft_strdup(value);
 	return (0);
 }
 
@@ -91,15 +93,11 @@ int	delete_env(t_env_manager *env_manager, char *key)
 		if (ft_strncmp(temp->key, key, ft_strlen(key) + 1) == 0)
 		{
 			if (temp == env_manager->head)
-			{
 				env_manager->head = temp->next;
-				free_node(&temp);
-			}
 			else
-			{
 				prev_node->next = temp->next;
-				free_node(&temp);
-			}
+			free_node(&temp);
+			break ;
 		}
 		prev_node = temp;
 		temp = temp->next;

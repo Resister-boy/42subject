@@ -6,7 +6,7 @@
 /*   By: jaehulee <jaehulee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/10 17:59:36 by jaehulee          #+#    #+#             */
-/*   Updated: 2023/06/10 20:51:20 by jaehulee         ###   ########.fr       */
+/*   Updated: 2023/06/19 01:50:51 by jaehulee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ t_env_manager *e_man)
 	}
 }
 
-static void	quote_cmd_expand_util(char *str, size_t idx, char **buf, \
+void	quote_cmd_expand_util(char *str, size_t idx, char **buf, \
 t_env_manager *e_man)
 {
 	size_t	i;
@@ -48,13 +48,15 @@ t_env_manager *e_man)
 	t_env	*env;
 
 	i = 0;
-	while (str[idx] && !ft_isspace(str[idx]))
+	while (str[idx])
 	{
 		start = idx;
-		while (str[i] && str[idx] != '$')
+		while (str[idx] && str[idx] != '$')
 			idx++;
 		if (start < idx)
+		{
 			buf[i++] = ft_substr(str, start, idx - start);
+		}
 		if (is_valid_dollar(str, idx))
 		{
 			idx++;
@@ -98,7 +100,7 @@ void	quote_cmd_expand(char *str, t_env_manager *e_man, t_tmp *temp)
 	dollar = get_dollar_count(str);
 	while (str[i] != '\0' && ft_isspace(str[i]) && str[i] != '\"')
 		i++;
-	if (str[i] == '\"' && str[i + 1] == '$')
+	if (str[i] != '\"' && str[i + 1] == '$')
 		dollar += 1;
 	buf = (char **)malloc(sizeof(char *) * (dollar + 1));
 	buf[dollar] = NULL;

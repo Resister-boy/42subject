@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_redir.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaehulee <jaehulee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: seonghle <seonghle@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 06:14:37 by jaehulee          #+#    #+#             */
-/*   Updated: 2023/06/10 20:50:13 by jaehulee         ###   ########.fr       */
+/*   Updated: 2023/06/12 16:48:08 by seonghle         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@ t_env	*expand_env_redir(t_env_manager *e_man, char *str)
 	return (expanded);
 }
 
-void	handle_ambiguous_redir(t_io *redir, char *str)
+void	handle_REDIR_AMBIGUOUS(t_io *redir, char *str)
 {
-	redir->type = AMBIGUOUS_REDIR;
+	redir->type = REDIR_AMBIGUOUS;
 	redir->filename = str;
 }
 
@@ -77,7 +77,7 @@ void	handle_redir_expand(char *str, t_env_manager *e_man, t_io *redir)
 	file = total_join(buf);
 	if (is_all_space(file) || ft_strlen(file) == 0)
 	{
-		handle_ambiguous_redir(redir, str);
+		handle_REDIR_AMBIGUOUS(redir, str);
 		return ;
 	}
 	redir->filename = file;
