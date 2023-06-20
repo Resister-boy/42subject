@@ -6,7 +6,7 @@
 /*   By: seonghle <seonghle@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 17:22:29 by seonghle          #+#    #+#             */
-/*   Updated: 2023/06/16 07:35:26 by seonghle         ###   ########seoul.kr  */
+/*   Updated: 2023/06/20 20:17:17 by seonghle         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,5 @@ void	ctrl_c(int signum)
 		exit(1);
 	rl_replace_line("", 0);
 	rl_redisplay();
-	g_exit_status = 1;
-}
-
-void	heredoc_parent_ctrl_c(int signum)
-{
-	if (signum != SIGINT)
-		return ;
 	g_exit_status = 1;
 }

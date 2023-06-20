@@ -6,7 +6,7 @@
 /*   By: jaehulee <jaehulee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/10 17:39:52 by jaehulee          #+#    #+#             */
-/*   Updated: 2023/06/19 03:35:00 by jaehulee         ###   ########.fr       */
+/*   Updated: 2023/06/20 21:25:34 by jaehulee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@ extern int	g_exit_status;
 static int	parse_no_q(t_pipe *node, t_env_manager *e_man, char *prompt, \
 size_t idx)
 {
-	printf("check\n");
+	if (prompt[idx] && (prompt[idx] == '\'' || prompt[idx] == '\"'))
+		return (idx);
 	while (prompt[idx] && ft_isspace(prompt[idx]))
 		idx++;
 	while (prompt[idx] && !ft_isspace(prompt[idx]))
@@ -85,24 +86,23 @@ size_t idx)
 int	parse_prompt(t_pipe_manager *p_man, t_env_manager *e_man, char *prompt)
 {
 	size_t	i;
-	int		status;
 	t_pipe	*last;
+	int		status;
 
 	i = 0;
-	status = 0;
 	last = NULL;
+	status = 0;
 	while (prompt[i])
 	{
 		if (is_valid_pipe(prompt, &i, status))
 			last = create_pipe_node(p_man, e_man);
 		status = check_is_quote(prompt[i], status);
-		if (status == SINGLE_QUOTE)
+		if (prompt[i] == '\'')
 			i = parse_single_q(last, prompt, i);
-		else if (status == DOUBLE_QUOTE)
+		else if (prompt[i] == '\"')
 			i = parse_double_q(last, e_man, prompt, i);
-		else if (status == NO_QUOTE)
+		else
 			i = parse_no_q(last, e_man, prompt, i);
-		printf("check status: %d\n", status);
 	}
 	if (last)
 		last->cmds = change_cmds(last, e_man);

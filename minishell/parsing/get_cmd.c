@@ -6,7 +6,7 @@
 /*   By: jaehulee <jaehulee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 16:23:54 by jaehulee          #+#    #+#             */
-/*   Updated: 2023/06/19 02:45:54 by jaehulee         ###   ########.fr       */
+/*   Updated: 2023/06/20 21:42:25 by jaehulee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int	parse_cmd(t_pipe *node, t_env_manager *e_man, char *prompt, size_t idx)
 	while (prompt[idx])
 	{
 		status = check_is_quote(prompt[idx], status);
-		if (status == 0 && (ft_isspace(prompt[idx]) || \
+		if (status == NO_QUOTE && (ft_isspace(prompt[idx]) || \
 		is_operator(prompt[idx])))
 			break ;
 		idx++;

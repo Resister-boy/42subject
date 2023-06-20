@@ -6,7 +6,7 @@
 #    By: jaehulee <jaehulee@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/11 16:21:07 by jaehulee          #+#    #+#              #
-#    Updated: 2023/06/18 22:43:15 by jaehulee         ###   ########.fr        #
+#    Updated: 2023/06/20 23:10:36 by jaehulee         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ built_in_path = ./built_in/
 
 env_path = ./env/
 
-libft_util_path = ./libft_util/
+util_path = ./util/
 
 execution_path = ./execution/
 
@@ -39,9 +39,10 @@ expand_cmd.c expand_cmd_util.c expand_redir.c free_util.c temp_util.c quote_util
 built_in_srcs = ft_export.c ft_unset.c ft_env.c ft_exit.c ft_echo.c ft_cd.c \
 ft_pwd.c built_in_util.c
 
-env_srcs = env_manager.c list_manager.c env_converter.c
+env_srcs = env_manager.c list_manager.c env_converter.c env_converter_util.c \
+env_key_manager.c
 
-libft_util_srcs = ft_strsdup.c ft_strslen.c ft_strcmp.c
+util_srcs = ft_strsdup.c ft_strslen.c ft_strcmp.c ft_perror.c ft_isnum.c
 
 execution_srcs = execute.c execute_util.c \
 execute_single_pipe.c execute_multiple_pipe.c child_status_checker.c
@@ -58,7 +59,7 @@ test_src = print_pipe.c
 all_srcs = $(addprefix $(built_in_path), $(built_in_srcs)) \
 $(addprefix $(env_path), $(env_srcs)) \
 $(addprefix $(parsing_path), $(parsing_srcs)) \
-$(addprefix $(libft_util_path), $(libft_util_srcs)) \
+$(addprefix $(util_path), $(util_srcs)) \
 $(addprefix $(execution_path), $(execution_srcs)) \
 $(addprefix $(free_path), $(free_srcs)) \
 $(addprefix $(signal_path), $(signal_srcs)) \
@@ -66,36 +67,43 @@ $(addprefix $(redirection_path), $(redirection_srcs)) \
 $(addprefix $(test_path), $(test_src)) \
 main.c
 
-RL_LIB = -L$(shell brew --prefix readline)/lib -lreadline
-RL_INCLUDES = -I$(shell brew --prefix readline)/include/readline -I./include
+RL_LIB = -L./readline/lib -lreadline -lhistory
 
-LIB = -Llibft -lft -Llibprintf -lprintf
+RL_INCLUDES = -I./readline/include/readline
 
-INCLUDE = -I./libft -I./libprintf -I./
+LIB = -Llibft -lft -Llibprintf -lprintf $(RL_LIB)
+
+INCLUDE = -I./libft -I./libprintf -I./ $(RL_INCLUDES)
 
 objs = $(all_srcs:.c=.o)
 
 ECHO_FLAG = 0
 
-all : $(NAME)
+all : maker
 
-$(NAME) : $(objs)
+maker:
+	make -C ./readline all
 	make -C ./libft all
 	make -C ./libprintf all
-	$(CC) $(CFLAGS)  -o $@ $^ $(LIB) $(RL_LIB)
+	make $(NAME)
+	touch $@
+
+$(NAME) : $(objs)
+	$(CC) $(CFLAGS)  -o $@ $^ $(LIB)
 ifneq ($(ECHO_FLAG),1)
 	echo "Linked into executable \033[0;32m$(NAME) \033[0m"
 	$(eval ECHO_FLAG = 0)
 endif
 
 .c.o :
-	$(CC) $(CFLAGS) -c $< -o $@ $(INCLUDE) $(RL_INCLUDES)
+	$(CC) $(CFLAGS) -c $< -o $@ $(INCLUDE)
 	printf "\033[Kcompile <$(notdir $<)>\r"
 
 clean :
 	make -C ./libft clean
 	make -C ./libprintf clean
-	$(RM) $(objs)
+	make -C ./readline clean
+	$(RM) $(objs) maker
 ifneq ($(ECHO_FLAG),1)
 	echo "Success to execute \033[0;32mclean\033[0m"
 	$(eval ECHO_FLAG = 0)
@@ -105,6 +113,7 @@ fclean :
 	make ECHO_FLAG=1 -s clean
 	make -s -C ./libft fclean
 	make -s -C ./libprintf fclean
+	make -s -C ./readline fclean
 	$(RM) $(NAME)
 ifneq ($(ECHO_FLAG),1)
 	echo "Success to execute \033[0;32mfclean\033[0m"

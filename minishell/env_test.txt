@@ -1,3 +1,4 @@
+보통맛
 echo '$USER'			//	$USER
 echo "$USER"			//	minckim 
 echo "'$USER'"			//	'minckim'
@@ -18,8 +19,6 @@ echo "hello\nman"		//	hello\nman
 echo hello\nman			//	hellonman
 echo "hello\ man"		//	hello\ man
 echo "hello'man"		//	hello'man
-echo "hello'man\""		//	hello'man"
-echo 'hello"man'		//	hello"man
 
 매운맛
 ec"""ho""" hello		//	hello

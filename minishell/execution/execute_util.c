@@ -6,7 +6,7 @@
 /*   By: seonghle <seonghle@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 09:22:50 by seonghle          #+#    #+#             */
-/*   Updated: 2023/06/16 11:42:38 by seonghle         ###   ########seoul.kr  */
+/*   Updated: 2023/06/19 03:06:51 by seonghle         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,22 @@ int	run_built_in(t_pipe *pipe, t_env_manager *env_manager)
 
 void	run_execve(t_pipe *pipe, t_env_manager *env_manager)
 {
+	set_child_signal();
 	if (execve(pipe->cmds[0], \
 		pipe->cmds, env_list_to_arr(env_manager)))
 	{
-		perror("minishell");
-		exit(127);
+		if (opendir(pipe->cmds[0]) && \
+			ft_printf(2, "minishell: %s: is a directory\n", pipe->cmds[0]))
+			exit(126);
+		else
+		{
+			if (ft_strchr(pipe->cmds[0], '/'))
+				ft_printf(2, "minishell: %s: No such file or directory\n", \
+					pipe->cmds[0]);
+			else
+				ft_printf(2, "minishell: %s: command not found\n", \
+					pipe->cmds[0]);
+			exit(127);
+		}
 	}
 }

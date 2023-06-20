@@ -6,7 +6,7 @@
 /*   By: jaehulee <jaehulee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/18 22:42:57 by jaehulee          #+#    #+#             */
-/*   Updated: 2023/06/19 03:25:47 by jaehulee         ###   ########.fr       */
+/*   Updated: 2023/06/20 23:02:36 by jaehulee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,42 +29,36 @@ int	check_quote_include(char *str)
 // 따옴표 확인
 int	check_is_quote(char chr, int status)
 {
-	if ((status) == 0 && chr == '\'')
-		return (1);
-	else if ((status) == 0 && chr == '\"')
-		return (2);
-	else if (status == 1 && chr != '\'')
-		return (1);
-	else if (status == 2 && chr != '\"')
-		return (2);
-	return (0);
+	if (status == NO_QUOTE && chr == '\'')
+		return (SINGLE_QUOTE);
+	else if (status == NO_QUOTE && chr == '\"')
+		return (DOUBLE_QUOTE);
+	else if (status == SINGLE_QUOTE && chr == '\'')
+		return (NO_QUOTE);
+	else if (status == DOUBLE_QUOTE && chr == '\"')
+		return (NO_QUOTE);
+	else if (status == SINGLE_QUOTE && chr != '\'')
+		return (SINGLE_QUOTE);
+	else if (status == DOUBLE_QUOTE && chr != '\"')
+		return (DOUBLE_QUOTE);
+	return (NO_QUOTE);
 }
 
 size_t	get_quote_count(char *str)
 {
 	size_t	i;
 	size_t	count;
-	int		status;
 
 	i = 0;
 	count = 0;
-	status = 0;
 	while (str[i])
 	{
-		status = check_is_quote(str[i], status);
-		if (status == SINGLE_QUOTE)
-		{
-			if (i != 0 && str[i - 1] != '\'')
-				count++;
-		}
-		else if (status == DOUBLE_QUOTE)
-		{
-			if (i != 0 && str[i] != '\"')
-				count++;
-		}
-		i++;
+		while (str[i] && (str[i] == '\'' || str[i] == '\"'))
+			i++;
+		if (str[i] && str[i] != '\'' && str[i] != '\"')
+			count++;
+		while (str[i] && str[i] != '\'' && str[i] != '\"')
+			i++;
 	}
-	if (count == 0)
-		return (1);
 	return (count);
 }

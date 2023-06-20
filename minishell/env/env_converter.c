@@ -6,7 +6,11 @@
 /*   By: seonghle <seonghle@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 01:29:00 by seonghle          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2023/06/18 05:50:06 by seonghle         ###   ########seoul.kr  */
+=======
+/*   Updated: 2023/06/19 01:10:34 by seonghle         ###   ########seoul.kr  */
+>>>>>>> da111faa5adfdf6c5ca6922fd020a340a94c91d1
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,27 +69,11 @@ char	**env_list_to_arr(t_env_manager *env_manager)
 	return (envp);
 }
 
-static int	is_num(char *arg)
-{
-	int	i;
-
-	if (!arg || !*arg)
-		return (0);
-	if (arg[0] == '-' || arg[0] == '+')
-		i = 1;
-	i = 0;
-	while (arg[i])
-		if (!ft_isdigit(arg[i++]))
-			return (0);
-	return (1);
-}
-
 int	env_arr_to_list(t_env_manager *env_manager, char **envp)
 {
 	int		i;
 	int		exist_oldpwd;
 	int		exist_shlvl;
-	char	*new_value;
 	t_env	*new_env;
 
 	i = -1;
@@ -96,18 +84,8 @@ int	env_arr_to_list(t_env_manager *env_manager, char **envp)
 		new_env = make_env(envp[i]);
 		if (!new_env && !free_env(env_manager))
 			return (1);
-		if (!ft_strncmp(new_env->key, "OLDPWD", 7))
-			exist_oldpwd = 1;
-		else if (!ft_strncmp(new_env->key, "SHLVL", 6))
-		{
-			exist_shlvl = 1;
-			if (!new_env->value || !is_num(new_env->value))
-				new_value = ft_itoa(1);
-			else
-				new_value = ft_itoa(ft_atoi(new_env->value) + 1);
-			free(new_env->value);
-			new_env->value = new_value;
-		}
+		exist_oldpwd |= is_exist_oldpwd(new_env->key);
+		exist_shlvl |= check_shlvl(new_env);
 		add_env(env_manager, new_env);
 	}
 	if (!exist_oldpwd)

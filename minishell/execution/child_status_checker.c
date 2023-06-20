@@ -6,7 +6,7 @@
 /*   By: seonghle <seonghle@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 08:57:59 by seonghle          #+#    #+#             */
-/*   Updated: 2023/06/16 08:59:10 by seonghle         ###   ########seoul.kr  */
+/*   Updated: 2023/06/18 23:07:34 by seonghle         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,12 @@
 
 extern int	g_exit_status;
 
-int	check_exit_status(int child_status)
+int	check_exit_status(int child_status, int *signum)
 {
+	*signum = 0;
 	if (WIFSIGNALED(child_status))
 	{
-		if (WTERMSIG(child_status) == 3)
-			ft_putstr_fd("Quit: 3", STDOUT_FILENO);
-		ft_putstr_fd("\n", STDOUT_FILENO);
+		*signum = WTERMSIG(child_status);
 		g_exit_status = 128 + WTERMSIG(child_status);
 	}
 	else if (WIFEXITED(child_status))

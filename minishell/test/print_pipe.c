@@ -6,11 +6,11 @@
 /*   By: seonghle <seonghle@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 18:05:59 by jaehulee          #+#    #+#             */
-/*   Updated: 2023/06/12 18:58:48 by seonghle         ###   ########seoul.kr  */
+/*   Updated: 2023/06/19 03:33:22 by seonghle         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "minishell.h"
 
 static void	print_cmd(t_pipe *node)
 {

@@ -1,30 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main_exit_test.c                                   :+:      :+:    :+:   */
+/*   ft_perror.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: seonghle <seonghle@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/22 21:55:34 by seonghle          #+#    #+#             */
-/*   Updated: 2023/05/22 21:56:05 by seonghle         ###   ########seoul.kr  */
+/*   Created: 2023/06/18 19:52:29 by seonghle          #+#    #+#             */
+/*   Updated: 2023/06/18 21:48:04 by seonghle         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "minishell.h"
 
 #include "minishell.h"
 
-void	check(void)
+int	ft_perror_join(char *prefix, char *postfix)
 {
-	system("leaks -q minishell");
+	char	*temp;
+
+	if (!prefix || !postfix)
+		return (1 & \
+			ft_printf(2, "ft_prerror_join error [%s] [%s]\n", prefix, postfix));
+	temp = ft_strjoin(prefix, postfix);
+	perror(temp);
+	free(temp);
+	return (1);
 }
 
-int	main(int argc, char **argv, char **envp)
+int	ft_perror(char *cause)
 {
-	atexit(check);
-	
-	(void)argc;
-	(void)argv;
-	(void)envp;
-	exit(ft_exit(argv + 1));
-	return (0);
+	if (!cause)
+		perror("minishell");
+	else
+		perror(cause);
+	return (1);
 }

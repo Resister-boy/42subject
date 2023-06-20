@@ -1,34 +1,43 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main_env_test.c                                    :+:      :+:    :+:   */
+/*   ft_isnum.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: seonghle <seonghle@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/22 21:03:39 by seonghle          #+#    #+#             */
-/*   Updated: 2023/05/22 21:54:03 by seonghle         ###   ########seoul.kr  */
+/*   Created: 2023/06/18 23:42:41 by seonghle          #+#    #+#             */
+/*   Updated: 2023/06/19 02:52:59 by seonghle         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	check(void)
+int	is_unsigned_num(char *arg)
 {
-	system("leaks -q minishell");
+	int	i;
+
+	if (!arg || !*arg)
+		return (0);
+	i = 0;
+	if (arg[0] == '+')
+		i++;
+	while (arg[i])
+		if (!ft_isdigit(arg[i++]))
+			return (0);
+	return (1);
 }
 
-int	main(int argc, char **argv, char **envp)
+int	is_num(char *arg)
 {
-	t_env_manager	env_manager;
+	int	i;
 
-	atexit(check);
-	
-	(void)argc;
-	(void)argv;
-	(void)envp;
-
-	if (env_arr_to_list(&env_manager, envp))
-		return (1);
-	exit(ft_env(&env_manager));
-	return (0);
+	if (!arg || !*arg)
+		return (0);
+	i = 0;
+	if (arg[0] == '-' || arg[0] == '+')
+		i++;
+	while (arg[i])
+		if (!ft_isdigit(arg[i++]))
+			return (0);
+	return (1);
 }

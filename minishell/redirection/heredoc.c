@@ -6,7 +6,7 @@
 /*   By: seonghle <seonghle@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 07:38:10 by seonghle          #+#    #+#             */
-/*   Updated: 2023/06/16 08:27:45 by seonghle         ###   ########seoul.kr  */
+/*   Updated: 2023/06/20 21:22:52 by seonghle         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ extern int	g_exit_status;
 
 static void	heredoc_child(int fd, char *delimiter)
 {
-	char *str;
+	char	*str;
 
 	set_heredoc_signal();
 	while (fd > 0)
@@ -40,6 +40,7 @@ int	ft_heredoc(char *delimiter, int i)
 	int		fd;
 	pid_t	pid;
 	int		child_status;
+	int		signum;
 
 	fd = new_heredoc_open(i);
 	set_signal_parent();
@@ -49,9 +50,9 @@ int	ft_heredoc(char *delimiter, int i)
 	else if (pid == 0)
 		heredoc_child(fd, delimiter);
 	waitpid(pid, &child_status, 0);
-	if (WEXITSTATUS(child_status) < 0)
-		return (close(fd));
-	g_exit_status = WEXITSTATUS(child_status);
+	check_exit_status(child_status, &signum);
+	if (WIFEXITED(child_status))
+		g_exit_status = WEXITSTATUS(child_status);
 	if (fd > -1)
 	{
 		close(fd);

@@ -6,7 +6,7 @@
 /*   By: jaehulee <jaehulee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 15:11:09 by jaehulee          #+#    #+#             */
-/*   Updated: 2023/06/19 00:17:37 by jaehulee         ###   ########.fr       */
+/*   Updated: 2023/06/20 23:10:31 by jaehulee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,10 @@
 # include <stdlib.h>
 # include <fcntl.h>
 # include <sys/wait.h>
-# include "readline.h"
-# include "history.h"
+# include <readline.h>
+# include <history.h>
 # include <termios.h>
+# include <dirent.h>
 
 typedef struct termios	t_termios;
 
@@ -164,13 +165,25 @@ int		check_quote_include(char *str);
 int		check_is_quote(char chr, int status);
 size_t	get_quote_count(char *str);
 
-// libft_util
+// test/print_pipe.c
+void	print_pipe(t_pipe_manager *p_man);
+
+////////////
+// public //
+////////////
+
+// util
 char	**ft_strsdup(char **strs);
 size_t	ft_strslen(char **strs);
 int		ft_strcmp(char *s1, char *s2);
 
-// test/print_pipe.c
-void	print_pipe(t_pipe_manager *p_man);
+// ft_perror.c
+int		ft_perror_join(char *prefix, char *postfix);
+int		ft_perror(char *cause);
+
+// ft_isnum.c
+int		is_unsigned_num(char *arg);
+int		is_num(char *arg);
 
 ///////////////
 // execution //
@@ -189,12 +202,14 @@ int		ft_pwd(void);
 int		is_ignore_first_arg(char *arg);
 
 // env_manager.c
-int		get_key_value(char *arg, char **key, char **value);
 int		change_env_value(t_env_manager *env_manager, char *key, char *value);
 t_env	*make_env(char *arg);
 int		add_env(t_env_manager *env_manager, t_env *new_env);
 int		delete_env(t_env_manager *env_manager, char *key);
 t_env	*get_env(t_env *env, char *key);
+
+// env_key_manager.c
+int		get_key_value(char *arg, char **key, char **value);
 int		is_valid_env_key(char *key);
 
 // list_manager.c
@@ -207,6 +222,10 @@ int		free_env(t_env_manager *env_manager);
 char	**env_list_to_arr(t_env_manager *env_manager);
 int		env_arr_to_list(t_env_manager *env_manager, char **envp);
 
+// env_converter_util.c
+int		is_exist_oldpwd(char *key);
+int		check_shlvl(t_env *env);
+
 // ft_execution_redir.c
 int		execute_redirection(t_pipe_manager *p_man);
 
@@ -215,7 +234,11 @@ void	free_for_exit(t_env_manager *env_manager, int code);
 
 // signal.c
 void	set_child_signal(void);
+<<<<<<< HEAD
 void	set_newline_signal(void);
+=======
+void	set_parent_ignore_signal(void);
+>>>>>>> da111faa5adfdf6c5ca6922fd020a340a94c91d1
 void	set_heredoc_signal(void);
 void	set_signal_parent(void);
 void	set_signal(void);
@@ -248,12 +271,14 @@ int		run_built_in(t_pipe *pipe, t_env_manager *env_manager);
 void	run_execve(t_pipe *pipe, t_env_manager *env_manager);
 
 // execute_single_pipe.c
-int		execute_single_pipe(t_pipe_manager *p_man, t_env_manager *env_manager);
+int		execute_single_pipe(t_pipe_manager *p_man, \
+	t_env_manager *env_manager);
 
 // execute_multiple_pipe.c
-int		execute_multiple_pipe(t_pipe_manager *p_man, t_env_manager *env_manager);
+int		execute_multiple_pipe(t_pipe_manager *p_man, \
+	t_env_manager *env_manager);
 
 // child_status_checker.c
-int		check_exit_status(int child_status);
+int		check_exit_status(int child_status, int *signum);
 
 #endif

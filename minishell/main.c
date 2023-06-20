@@ -6,7 +6,11 @@
 /*   By: seonghle <seonghle@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 13:47:01 by jaehulee          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2023/06/18 05:48:57 by seonghle         ###   ########seoul.kr  */
+=======
+/*   Updated: 2023/06/20 19:40:37 by seonghle         ###   ########seoul.kr  */
+>>>>>>> da111faa5adfdf6c5ca6922fd020a340a94c91d1
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +34,6 @@ char *prompt)
 	return (0);
 }
 
-void	leaks(void)
-{
-	system("leaks --list minishell");
-}
-
 int	main(int argc, char **argv, char **envp)
 {
 	t_pipe_manager	p_man;
@@ -44,7 +43,6 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	set_signal();
-	// atexit(leaks);
 	ft_memset(&p_man, 0, sizeof(t_pipe_manager));
 	ft_memset(&env_manager, 0, sizeof(t_env_manager));
 	if (env_arr_to_list(&env_manager, envp))
@@ -62,8 +60,6 @@ int	main(int argc, char **argv, char **envp)
 		}
 		if (!g_exit_status)
 			ft_execution(&p_man, &env_manager);
-		else
-			ft_printf(2, "WTF %d\n", g_exit_status);
 		free_prompt(&p_man);
 		free(prompt);
 	}
