@@ -3,16 +3,16 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jaehulee <jaehulee@student.42.fr>          +#+  +:+       +#+         #
+#    By: seonghle <seonghle@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/11 16:21:07 by jaehulee          #+#    #+#              #
-#    Updated: 2023/07/11 00:30:45 by jaehulee         ###   ########.fr        #
+#    Updated: 2023/07/15 14:43:53 by seonghle         ###   ########seoul.kr   #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
 
-CFLAGS = -Wall -Wextra -Werror -g3
+CFLAGS = -Wall -Wextra -Werror
 
 mandatory_path = ./mandatory
 
