@@ -6,14 +6,14 @@
 /*   By: seonghle <seonghle@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 18:21:03 by seonghle          #+#    #+#             */
-/*   Updated: 2023/06/19 03:17:41 by seonghle         ###   ########seoul.kr  */
+/*   Updated: 2023/06/26 17:39:17 by seonghle         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
 static int	search_format(int fd, const char *format, \
-	va_list ap, int *total_len);
+	va_list *ap, int *total_len);
 
 int	ft_printf(int fd, const char *format, ...)
 {
@@ -34,7 +34,7 @@ int	ft_printf(int fd, const char *format, ...)
 			total_len++;
 		}
 		else
-			if (search_format(fd, ++format, ap, &total_len) == -1)
+			if (search_format(fd, ++format, &ap, &total_len) == -1)
 				break ;
 		format++;
 	}
@@ -43,7 +43,7 @@ int	ft_printf(int fd, const char *format, ...)
 }
 
 static int	search_format(int fd, const char *format, \
-	va_list ap, int *total_len)
+	va_list *ap, int *total_len)
 {
 	int	result_len;
 

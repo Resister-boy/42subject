@@ -1,26 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_write_set_2.c                                   :+:      :+:    :+:   */
+/*   ft_perror.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: seonghle <seonghle@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/17 12:59:29 by seonghle          #+#    #+#             */
-/*   Updated: 2023/06/26 17:39:04 by seonghle         ###   ########seoul.kr  */
+/*   Created: 2023/06/18 19:52:29 by seonghle          #+#    #+#             */
+/*   Updated: 2023/06/26 02:08:23 by seonghle         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "minishell.h"
 
-int	write_hex(int fd, va_list *ap, int is_lowercase)
+int	ft_perror_join(char *prefix, char *postfix)
 {
-	unsigned int	arg_uint;
+	char	*temp;
 
-	arg_uint = va_arg(*ap, unsigned int);
-	return (ft_print_hex(fd, (unsigned long long)arg_uint, is_lowercase));
+	if (!prefix || !postfix)
+		return (1 & \
+			ft_printf(2, "ft_prerror_join error [%s] [%s]\n", prefix, postfix));
+	temp = ft_strjoin(prefix, postfix);
+	perror(temp);
+	ft_free((void **)&temp);
+	return (1);
 }
 
-int	wirte_percentage(int fd)
+int	ft_perror(char *cause)
 {
-	return (write(fd, &"%", 1));
+	if (!cause)
+		perror("minishell");
+	else
+		perror(cause);
+	return (1);
 }

@@ -1,26 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_write_set_2.c                                   :+:      :+:    :+:   */
+/*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: seonghle <seonghle@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/17 12:59:29 by seonghle          #+#    #+#             */
-/*   Updated: 2023/06/26 17:39:04 by seonghle         ###   ########seoul.kr  */
+/*   Created: 2023/05/27 03:22:05 by seonghle          #+#    #+#             */
+/*   Updated: 2023/07/10 00:24:13 by seonghle         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "minishell.h"
 
-int	write_hex(int fd, va_list *ap, int is_lowercase)
+int	ft_execution(t_pipe_manager *p_man, t_env_manager *env_manager)
 {
-	unsigned int	arg_uint;
-
-	arg_uint = va_arg(*ap, unsigned int);
-	return (ft_print_hex(fd, (unsigned long long)arg_uint, is_lowercase));
-}
-
-int	wirte_percentage(int fd)
-{
-	return (write(fd, &"%", 1));
+	g_exit_status = execute_redirection(p_man, env_manager);
+	if (p_man->head && g_exit_status == 0)
+	{
+		if (p_man->size == 1)
+			execute_single_pipe(p_man, env_manager);
+		else
+			execute_multiple_pipe(p_man, env_manager);
+	}
+	return (0);
 }

@@ -1,26 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_write_set_2.c                                   :+:      :+:    :+:   */
+/*   syntax_error.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: seonghle <seonghle@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/17 12:59:29 by seonghle          #+#    #+#             */
-/*   Updated: 2023/06/26 17:39:04 by seonghle         ###   ########seoul.kr  */
+/*   Created: 2023/06/21 18:57:49 by jaehulee          #+#    #+#             */
+/*   Updated: 2023/07/10 00:24:24 by seonghle         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "minishell.h"
 
-int	write_hex(int fd, va_list *ap, int is_lowercase)
+int	unexpected_token_error(char *token)
 {
-	unsigned int	arg_uint;
-
-	arg_uint = va_arg(*ap, unsigned int);
-	return (ft_print_hex(fd, (unsigned long long)arg_uint, is_lowercase));
-}
-
-int	wirte_percentage(int fd)
-{
-	return (write(fd, &"%", 1));
+	g_exit_status = 258;
+	ft_printf(1, "minishell: syntax error near unexpected token '%s'\n", token);
+	return (-1);
 }

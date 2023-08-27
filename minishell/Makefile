@@ -3,95 +3,106 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jaehulee <jaehulee@student.42.fr>          +#+  +:+       +#+         #
+#    By: seonghle <seonghle@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/11 16:21:07 by jaehulee          #+#    #+#              #
-#    Updated: 2023/06/20 23:10:36 by jaehulee         ###   ########.fr        #
+#    Updated: 2023/07/15 14:43:53 by seonghle         ###   ########seoul.kr   #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
 
-CFLAGS = -Wall -Wextra -Werror -g3 -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror
 
-parsing_path = ./parsing/
+mandatory_path = ./mandatory
 
-built_in_path = ./built_in/
+parsing_path = $(mandatory_path)/parsing/
 
-env_path = ./env/
+parsing_cmd_path = $(parsing_path)/cmd/
 
-util_path = ./util/
+parsing_expand_path = $(parsing_path)/expand/
 
-execution_path = ./execution/
+parsing_redir_path = $(parsing_path)/redir/
 
-free_path = ./free/
+parsing_util_path = $(parsing_path)/util/
 
-signal_path = ./signal/
+execution_path = $(mandatory_path)/execution/
 
-redirection_path = ./redirection/
+execution_built_in_path = $(execution_path)/built_in/
 
-test_path = ./test/
+execution_execute_path = $(execution_path)/execute/
 
-parsing_srcs = parse_prompt.c get_pipe_node.c check_util.c \
-expansion_util.c get_cmd.c get_cmd_util.c get_redir.c total_join.c \
-expand_cmd.c expand_cmd_util.c expand_redir.c free_util.c temp_util.c quote_util.c
+execution_redirection_path = $(execution_path)/redirection/
+
+execution_util_path = $(execution_path)/util/
+
+env_path = $(mandatory_path)/env/
+
+signal_path = $(mandatory_path)/signal/
+
+parsing_srcs = parse_prompt.c
+
+cmd_srcs = get_cmd.c get_cmd_util.c
+
+expand_srcs = expand_cmd.c expand_quote_double.c expand_quote_none.c \
+expand_redir.c expand_redir_util.c expand_util.c
+
+redir_srcs = get_redir.c get_redir_util.c
+
+parse_util_srcs = checker.c checker_util.c ft_strsdup.c ft_strslen.c \
+get_pipe_node.c free_for_parse.c quote_manager.c syntax_error.c \
+temp_manager.c total_join.c ft_strcmp.c
 
 built_in_srcs = ft_export.c ft_unset.c ft_env.c ft_exit.c ft_echo.c ft_cd.c \
 ft_pwd.c built_in_util.c
 
-env_srcs = env_manager.c list_manager.c env_converter.c env_converter_util.c \
-env_key_manager.c
-
-util_srcs = ft_strsdup.c ft_strslen.c ft_strcmp.c ft_perror.c ft_isnum.c
-
-execution_srcs = execute.c execute_util.c \
+execute_srcs = execute.c execute_util.c fd_setter.c \
 execute_single_pipe.c execute_multiple_pipe.c child_status_checker.c
-
-free_srcs = free_exit.c
-
-signal_srcs = signal.c signal_handler.c
 
 redirection_srcs = execute_redirection.c open_redirection.c \
 heredoc.c heredoc_util.c
 
-test_src = print_pipe.c
+execution_util_srcs = ft_perror.c ft_isnum.c ft_free.c free_exit.c ft_close.c \
+ft_fork.c
 
-all_srcs = $(addprefix $(built_in_path), $(built_in_srcs)) \
-$(addprefix $(env_path), $(env_srcs)) \
+env_srcs = env_manager.c list_manager.c env_converter.c env_converter_util.c \
+env_key_manager.c
+
+signal_srcs = signal.c signal_handler.c
+
+all_srcs = $(mandatory_path)/main.c\
 $(addprefix $(parsing_path), $(parsing_srcs)) \
-$(addprefix $(util_path), $(util_srcs)) \
-$(addprefix $(execution_path), $(execution_srcs)) \
-$(addprefix $(free_path), $(free_srcs)) \
-$(addprefix $(signal_path), $(signal_srcs)) \
-$(addprefix $(redirection_path), $(redirection_srcs)) \
-$(addprefix $(test_path), $(test_src)) \
-main.c
+$(addprefix $(parsing_cmd_path), $(cmd_srcs)) \
+$(addprefix $(parsing_expand_path), $(expand_srcs)) \
+$(addprefix $(parsing_redir_path), $(redir_srcs)) \
+$(addprefix $(parsing_util_path), $(parse_util_srcs)) \
+$(addprefix $(execution_built_in_path), $(built_in_srcs)) \
+$(addprefix $(execution_execute_path), $(execute_srcs)) \
+$(addprefix $(execution_redirection_path), $(redirection_srcs)) \
+$(addprefix $(execution_util_path), $(execution_util_srcs)) \
+$(addprefix $(env_path), $(env_srcs)) \
+$(addprefix $(signal_path), $(signal_srcs))
 
-RL_LIB = -L./readline/lib -lreadline -lhistory
+RL_LIB = -L$(shell brew --prefix readline)/lib -lreadline -lhistory
 
-RL_INCLUDES = -I./readline/include/readline
+RL_INCLUDES = -I$(shell brew --prefix readline)/include/readline
 
 LIB = -Llibft -lft -Llibprintf -lprintf $(RL_LIB)
 
-INCLUDE = -I./libft -I./libprintf -I./ $(RL_INCLUDES)
+INCLUDE = -I./libft -I./libprintf -I$(mandatory_path)/ $(RL_INCLUDES)
 
 objs = $(all_srcs:.c=.o)
 
 ECHO_FLAG = 0
 
-all : maker
-
-maker:
-	make -C ./readline all
-	make -C ./libft all
-	make -C ./libprintf all
-	make $(NAME)
-	touch $@
+all : $(NAME)
 
 $(NAME) : $(objs)
+	make -C ./libft all
+	make -C ./libprintf all
 	$(CC) $(CFLAGS)  -o $@ $^ $(LIB)
 ifneq ($(ECHO_FLAG),1)
-	echo "Linked into executable \033[0;32m$(NAME) \033[0m"
+	echo "Linked into executable \033[K\033[0;32m$(NAME) \033[0m"
 	$(eval ECHO_FLAG = 0)
 endif
 
@@ -102,10 +113,9 @@ endif
 clean :
 	make -C ./libft clean
 	make -C ./libprintf clean
-	make -C ./readline clean
 	$(RM) $(objs) maker
 ifneq ($(ECHO_FLAG),1)
-	echo "Success to execute \033[0;32mclean\033[0m"
+	echo "Success to execute \033[K\033[0;32mclean\033[0m"
 	$(eval ECHO_FLAG = 0)
 endif
 
@@ -113,17 +123,16 @@ fclean :
 	make ECHO_FLAG=1 -s clean
 	make -s -C ./libft fclean
 	make -s -C ./libprintf fclean
-	make -s -C ./readline fclean
 	$(RM) $(NAME)
 ifneq ($(ECHO_FLAG),1)
-	echo "Success to execute \033[0;32mfclean\033[0m"
+	echo "Success to execute \033[K\033[0;32mfclean\033[0m"
 	$(eval ECHO_FLAG = 0)
 endif
 
 re :
 	make ECHO_FLAG=1 -s fclean
 	make ECHO_FLAG=1 all
-	echo "Success to execute \033[0;32mre             \033[0m"
+	echo "Success to execute \033[K\033[0;32mre\033[0m"
 
 .PHONY: all .c.o clean fclean re
 
