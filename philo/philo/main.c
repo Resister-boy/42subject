@@ -1,37 +1,48 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: egiraldi <egiraldi@student.42lyon.fr>      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/17 17:34:17 by egiraldi          #+#    #+#             */
-/*   Updated: 2023/01/17 17:34:21 by egiraldi         ###   ########lyon.fr   */
-/*                                                                            */
-/* ************************************************************************** */
+#include "philo.h"
 
-#include "philosophers.h"
-
-int	main(int ac, char **av)
+int	start_philo(t_table *table)
 {
-	t_table	table;
+	int	i;
 
-	if (ft_parse(ac, av, &(table.input_data)) < 0)
+	i = 0;
+	pthread_mutex_lock(&(table->mutex_init));
+	while (i < table->args->philo_count)
 	{
-		write(2, "Parse error\n", 12);
-		return (1);
+		pthread_mutex_lock(&(table->mutex_last_eat));
+		table->philos[i]->last_eat = get_current_time();
+		pthread_mutex_unlock(&(table->mutex_eat_eat));
+		table->philos[i]->last_sleep = get_current_time();
+		if (pthread_create(&(table->philos[i]->thread_id), NULL, \
+		philo_lift, &(table->philos[i])))
+			return (1);
+		i++;
 	}
-	if (ft_init(&table) < 0)
-	{
-		write(2, "Initialization error\n", 21);
+	pthread_mutex_unlock(&(table->mutex_init));
+	check_is_done(table);
+	i = 0;
+	while (i < table->args->philo_count)
+		pthread_join(table->philos[i]->thread_id, NULL);
+	return (0);
+}
+
+int	main(int argc, char **argv)
+{
+	t_table	*table;
+
+	if (!(argc == 5 || argc == 6))
+		return (print_error("Arguments"));
+	table = (t_table *)malloc(sizeof(t_table));
+	if (table == NULL)
 		return (1);
-	}
-	if (ft_start(&table) < 0)
-	{
-		ft_destroy(&table);
-		write(2, "Thread error\n", 13);
-		return (1);
-	}
-	ft_destroy(&table);
+	memset(table, 0, sizeof(t_table));
+	if (init(argc, argv, &table))
+		return (print_error("Parse"));
+	if (start_philo(table))
+  {
+    join_thread(&table);
+    free_table(&table);
+    print_error("Thread");
+    return (1);
+  }
 	return (0);
 }
