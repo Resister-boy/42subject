@@ -13,12 +13,12 @@ int	start_philo(t_table *table)
 		pthread_mutex_unlock(&(table->mutex_eat_eat));
 		table->philos[i]->last_sleep = get_current_time();
 		if (pthread_create(&(table->philos[i]->thread_id), NULL, \
-		philo_lift, &(table->philos[i])))
+		philo_life, &(table->philos[i])))
 			return (1);
 		i++;
 	}
 	pthread_mutex_unlock(&(table->mutex_init));
-	check_is_done(table);
+	monitering(table);
 	i = 0;
 	while (i < table->args->philo_count)
 		pthread_join(table->philos[i]->thread_id, NULL);
@@ -33,7 +33,7 @@ int	main(int argc, char **argv)
 		return (print_error("Arguments"));
 	table = (t_table *)malloc(sizeof(t_table));
 	if (table == NULL)
-		return (1);
+		return (print_error("Malloc"));
 	memset(table, 0, sizeof(t_table));
 	if (init(argc, argv, &table))
 		return (print_error("Parse"));
@@ -41,8 +41,7 @@ int	main(int argc, char **argv)
   {
     join_thread(&table);
     free_table(&table);
-    print_error("Thread");
-    return (1);
+    return (print_error("Thread"));
   }
 	return (0);
 }

@@ -31,9 +31,9 @@ typedef struct s_philo
 	unsigned int	last_sleep;
 	unsigned int	is_dead;
 	unsigned int	eat_count;
-	int				left_fork;
-	int				right_fork;
-	pthread_t		thread_id;
+	int						left_fork;
+	int						right_fork;
+	pthread_t			thread_id;
 	struct s_table	*table;
 }	t_philo;
 

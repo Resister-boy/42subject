@@ -25,18 +25,8 @@ int check_is_dead(t_philo *philo)
     {
       print_state(philo->table->philos[i], "died");
       philo->table->is_done = 1;
+      return (1);
     }
   }
-}
-
-void  check_is_done(t_philo *philo)
-{
-  while (!check_philo_status(philo->table))
-  {
-    if (!check_eat_count(philo))
-    {
-      philo->table->is_done = 1;
-      break ;
-    }
-  }
+  return (0);
 }
